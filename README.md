@@ -1,9 +1,10 @@
 RecyclerViewHeader
-===============
+==================
 Super fast and easy way to create header for Android `RecyclerView`.
 
-![ ](/RecyclerViewHeader.png)
+Let's you create header `View` for any `RecyclerView` that uses `LinearLayoutManager` or `GridLayoutManager` with just a simple method call.
 
+![ ](/RecyclerViewHeader.png)
 
 Usage
 =====
@@ -13,7 +14,7 @@ Basically, there are two ways of using `RecyclerViewHeader`.
 
 **Regular approach** (super easy to use, but it uses additional `Layouts` so it's a bit less efficient than the second approach):
 
-  1. Create an xml layout file for your header (the file can contain any type of `View` or `ViewGroup`)
+  1. Create an xml layout file for your header (file can contain any type of `View` or `ViewGroup`)
 
         <FrameLayout
             android:layout_width="match_parent"
@@ -34,7 +35,7 @@ Basically, there are two ways of using `RecyclerViewHeader`.
   3. Attach `RecyclerViewHeader` to your `RecyclerView` and you're done!
 
         RecyclerView recyclerView = (RecyclerView) findViewById(R.id.recycler_view);
-        // setting LayoutManager for your RecyclerView
+        // set LayoutManager for your RecyclerView
         header.attachTo(recyclerView);
 
 **Header-already-aligned approach** (does not introduce any additional `Layouts`):
@@ -74,31 +75,36 @@ Basically, there are two ways of using `RecyclerViewHeader`.
   3. Attach `RecyclerViewHeader` to your `RecyclerView` (with `attachTo(RecyclerView recycler, boolean headerAlreadyAligned)`) and that's it.
 
         RecyclerView recyclerView = (RecyclerView) findViewById(R.id.recycler_view);
-        // setting LayoutManager for your RecyclerView
+        // set LayoutManager for your RecyclerView
         header.attachTo(recyclerView, true);
 
 
-**Important Notes:**
+Important notes
+---------------
 
 `RecyclerViewHeader` needs to be called after you've set the `LayoutManager` for your `RecyclerView`.
 
-Current implementation of the library can be used for `RecyclerViews` using `LinearLayoutManager` or `GridLayoutManager`.
+Current implementation of the library can be used for `RecyclerViews` that uses `LinearLayoutManager` or `GridLayoutManager`.
 
 If you were planning to use `setOnScrollListener(...)` method for your `RecyclerView`, be sure to do it before calling `attachTo(...)` method of the `RecyclerViewHeader`.
 
 
 Including In Your Project
 -------------------------
-I will upload the library to Maven Central as soon as I finish `Javadoc`.
+You can grab the library via Maven Central. Just add a proper dependency inside your `build.gradle`. Like this:
 
-It will be ready really, really soon... stay tuned.
+```xml
+dependencies {
+    compile 'com.bartoszlipinski.recyclerviewheader:library:1.0.0'
+}
+```
 
 Developed by
-==========
+============
  * Bartosz Lipiński
 
 License
-======
+=======
 
     Copyright 2015 Bartosz Lipiński
     
