@@ -54,7 +54,7 @@ Basically, there are two ways of using `RecyclerViewHeader`.
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_gravity="center"
+                    android:layout_centerInParent="true"
                     android:text="header"/>
 
             </com.bartoszlipinski.recyclerviewheader.RecyclerViewHeader>
