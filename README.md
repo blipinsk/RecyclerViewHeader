@@ -11,7 +11,7 @@ Usage
 
 Basically, there are two ways of using `RecyclerViewHeader`.
 
-**Regular approach** (super easy to use, but it uses additional `FrameLayouts` so it's a bit less efficient than the second approach):
+**Regular approach** (super easy to use, but it uses additional `Layouts` so it's a bit less efficient than the second approach):
 
   1. Create an xml layout file for your header (the file can contain any type of `View` or `ViewGroup`)
 
@@ -37,7 +37,7 @@ Basically, there are two ways of using `RecyclerViewHeader`.
         // setting LayoutManager for your RecyclerView
         header.attachTo(recyclerView);
 
-**Header-already-aligned approach** (does not introduce any additional `FrameLayouts`):
+**Header-already-aligned approach** (does not introduce any additional `Layouts`):
 
   1. Place `RecyclerViewHeader`layout under your `RecyclerView` at the top part of it.
 
