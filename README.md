@@ -40,11 +40,17 @@ Basically, there are two ways of using `RecyclerViewHeader`.
 
 **Header-already-aligned approach** (does not introduce any additional `Layouts`):
 
-  1. Place `RecyclerViewHeader`layout under your `RecyclerView` at the top part of it.
+  1. Place `RecyclerViewHeader`layout above your `RecyclerView` at the top part of it.
 
         <FrameLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
+
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/recycler"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal|top" />
 
             <com.bartoszlipinski.recyclerviewheader.RecyclerViewHeader
                 android:id="@+id/header"
@@ -59,12 +65,6 @@ Basically, there are two ways of using `RecyclerViewHeader`.
                     android:text="header"/>
 
             </com.bartoszlipinski.recyclerviewheader.RecyclerViewHeader>
-
-            <android.support.v7.widget.RecyclerView
-                android:id="@+id/recycler"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_horizontal|top" />
 
         </FrameLayout>
 
@@ -95,7 +95,7 @@ You can grab the library via Maven Central. Just add a proper dependency inside 
 
 ```xml
 dependencies {
-    compile 'com.bartoszlipinski.recyclerviewheader:library:1.0.0'
+    compile 'com.bartoszlipinski.recyclerviewheader:library:1.0.1'
 }
 ```
 
