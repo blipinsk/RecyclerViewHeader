@@ -44,7 +44,7 @@ public class RecyclerViewHeader extends RelativeLayout {
     /**
      * Inflates layout from <code>xml</code> and encapsulates it with <code>RecyclerViewHeader</code>.
      *
-     * @param context application context.
+     * @param context   application context.
      * @param layoutRes layout resource to be inflated.
      * @return <code>RecyclerViewHeader</code> view object.
      */
@@ -83,7 +83,7 @@ public class RecyclerViewHeader extends RelativeLayout {
      * Be sure that <code>setLayoutManager(...)</code> has been called for <code>RecyclerView</code> before calling this method.
      * Also, if you were planning to use <code>setOnScrollListener(...)</code> method for your <code>RecyclerView</code>, be sure to do it before calling this method.
      *
-     * @param recycler <code>RecyclerView</code> to attach <code>RecyclerViewHeader</code> to.
+     * @param recycler             <code>RecyclerView</code> to attach <code>RecyclerViewHeader</code> to.
      * @param headerAlreadyAligned If set to <code>false</code>, method will perform necessary actions to properly align
      *                             the header within <code>RecyclerView</code>. If set to <code>true</code> method will assume,
      *                             that user has already aligned <code>RecyclerViewHeader</code> properly.
