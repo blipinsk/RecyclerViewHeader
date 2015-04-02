@@ -41,6 +41,13 @@ public class RecyclerViewHeader extends RelativeLayout {
     private boolean mAlreadyAligned;
     private int mCurrentScroll;
 
+    /**
+     * Inflates layout from <code>xml</code> and encapsulates it with <code>RecyclerViewHeader</code>.
+     *
+     * @param context application context.
+     * @param layoutRes layout resource to be inflated.
+     * @return <code>RecyclerViewHeader</code> view object.
+     */
     public static RecyclerViewHeader fromXml(Context context, @LayoutRes int layoutRes) {
         RecyclerViewHeader header = new RecyclerViewHeader(context);
         View.inflate(context, layoutRes, header);
@@ -59,10 +66,28 @@ public class RecyclerViewHeader extends RelativeLayout {
         super(context, attrs, defStyle);
     }
 
+    /**
+     * Attaches <code>RecyclerViewHeader</code> to <code>RecyclerView</code>.
+     * This method will perform necessary actions to properly align the header within <code>RecyclerView</code>.
+     * Be sure that <code>setLayoutManager(...)</code> has been called for <code>RecyclerView</code> before calling this method.
+     * Also, if you were planning to use <code>setOnScrollListener(...)</code> method for your <code>RecyclerView</code>, be sure to do it before calling this method.
+     *
+     * @param recycler <code>RecyclerView</code> to attach <code>RecyclerViewHeader</code> to.
+     */
     public void attachTo(RecyclerView recycler) {
         attachTo(recycler, false);
     }
 
+    /**
+     * Attaches <code>RecyclerViewHeader</code> to <code>RecyclerView</code>.
+     * Be sure that <code>setLayoutManager(...)</code> has been called for <code>RecyclerView</code> before calling this method.
+     * Also, if you were planning to use <code>setOnScrollListener(...)</code> method for your <code>RecyclerView</code>, be sure to do it before calling this method.
+     *
+     * @param recycler <code>RecyclerView</code> to attach <code>RecyclerViewHeader</code> to.
+     * @param headerAlreadyAligned If set to <code>false</code>, method will perform necessary actions to properly align
+     *                             the header within <code>RecyclerView</code>. If set to <code>true</code> method will assume,
+     *                             that user has already aligned <code>RecyclerViewHeader</code> properly.
+     */
     public void attachTo(RecyclerView recycler, boolean headerAlreadyAligned) {
         validateRecycler(recycler, headerAlreadyAligned);
 
