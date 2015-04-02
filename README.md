@@ -84,9 +84,9 @@ Important notes
 
 `RecyclerViewHeader` needs to be called after you've set the `LayoutManager` for your `RecyclerView`.
 
-Current implementation of the library can be used for `RecyclerViews` that uses `LinearLayoutManager` or `GridLayoutManager`.
+Current implementation of the library can be used with `RecyclerViews` that use `LinearLayoutManager` or `GridLayoutManager`.
 
-If you were planning to use `setOnScrollListener(...)` method for your `RecyclerView`, be sure to do it before calling `attachTo(...)` method of the `RecyclerViewHeader`.
+If you are planning to use `setOnScrollListener(...)` method for your `RecyclerView`, be sure to do it before calling `attachTo(...)` method of the `RecyclerViewHeader`.
 
 
 Including In Your Project
