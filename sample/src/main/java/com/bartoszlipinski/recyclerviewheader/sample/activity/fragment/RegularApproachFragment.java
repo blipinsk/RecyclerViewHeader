@@ -52,7 +52,7 @@ public class RegularApproachFragment extends Fragment {
     private void setupViews(View view) {
         mRecycler = (RecyclerView) view.findViewById(R.id.recycler);
         mRecycler.setLayoutManager(new GridLayoutManager(getActivity(), 3));
-        mRecycler.setAdapter(new ColorItemsAdapter(getActivity(), 18));
+        mRecycler.setAdapter(new ColorItemsAdapter(getActivity(), 21));
 
         mRecyclerHeader = RecyclerViewHeader.fromXml(getActivity(), R.layout.layout_header);
         mRecyclerHeader.attachTo(mRecycler);

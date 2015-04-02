@@ -5,6 +5,12 @@
     android:paddingLeft="@dimen/title_padding"
     android:paddingRight="@dimen/title_padding">
 
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/recycler"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal|top" />
+
     <com.bartoszlipinski.recyclerviewheader.RecyclerViewHeader
         android:id="@+id/header"
         android:layout_width="match_parent"
@@ -24,9 +30,4 @@
 
     </com.bartoszlipinski.recyclerviewheader.RecyclerViewHeader>
 
-    <android.support.v7.widget.RecyclerView
-        android:id="@+id/recycler"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center_horizontal|top" />
 </FrameLayout>

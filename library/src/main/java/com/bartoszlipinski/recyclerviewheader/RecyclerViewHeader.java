@@ -131,8 +131,8 @@ public class RecyclerViewHeader extends RelativeLayout {
 
                 ((ViewGroup) currentParent).removeViewAt(indexWithinParent);
                 recycler.setLayoutParams(new FrameLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
-                newParent.addView(RecyclerViewHeader.this);
                 newParent.addView(recycler);
+                newParent.addView(RecyclerViewHeader.this);
                 ((ViewGroup) currentParent).addView(newParent, indexWithinParent);
             }
         }
