@@ -11,7 +11,7 @@ Usage
 
 Basically, there are two ways of using `RecyclerViewHeader`.
 
-**Regular approach** (super easy, but a bit less efficient from the second approach - this one uses additional `FrameLayouts`):
+**Regular approach** (super easy to use, but it uses additional `FrameLayouts` so it's a bit less efficient from the second approach):
 
   1. Create an xml layout file for your header (the file can contain any type of `View` or `ViewGroup`)
 
@@ -78,7 +78,10 @@ Basically, there are two ways of using `RecyclerViewHeader`.
         header.attachTo(recyclerView, true);
 
 
-**Important Notes:** `RecyclerViewHeader` needs to be called after you've set the `LayoutManager` for your `RecyclerView`. Current implementation of the library can be used for `RecyclerViews` using `LinearLayoutManager` or `GridLayoutManager`.
+**Important Notes:**
+`RecyclerViewHeader` needs to be called after you've set the `LayoutManager` for your `RecyclerView`.
+Current implementation of the library can be used for `RecyclerViews` using `LinearLayoutManager` or `GridLayoutManager`.
+If you were planning to use `setOnScrollListener(...)` method for your `RecyclerView`, be sure to do it before calling `attachTo(...)` method of the `RecyclerViewHeader`.
 
 
 Including In Your Project
