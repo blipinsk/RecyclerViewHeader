@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="title_padding">20dp</dimen>
+    <dimen name="background_radius">4dp</dimen>
+    <dimen name="recycler_divider_width">1dp</dimen>
+    <dimen name="header_height">200dp</dimen>
+</resources>
