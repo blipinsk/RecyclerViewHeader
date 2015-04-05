@@ -2,11 +2,11 @@ apply plugin: 'com.android.application'
 
 android {
     compileSdkVersion 21
-    buildToolsVersion "21.1.1"
+    buildToolsVersion "21.1.2"
 
     defaultConfig {
         applicationId "com.bartoszlipinski.recyclerviewheader.sample"
-        minSdkVersion 16
+        minSdkVersion 7
         targetSdkVersion 21
         versionCode 2
         versionName "1.0.1"
@@ -22,5 +22,5 @@ android {
 dependencies {
     compile fileTree(dir: 'libs', include: ['*.jar'])
     compile project(':library')
-    compile 'com.android.support:appcompat-v7:21.0.3'
+    compile 'com.android.support:appcompat-v7:22.0.0'
 }
