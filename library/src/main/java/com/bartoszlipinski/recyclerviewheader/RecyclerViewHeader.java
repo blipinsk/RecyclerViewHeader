@@ -16,6 +16,7 @@
 
 package com.bartoszlipinski.recyclerviewheader;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.graphics.Rect;
 import android.support.annotation.LayoutRes;
@@ -138,6 +139,7 @@ public class RecyclerViewHeader extends RelativeLayout {
         }
     }
 
+    @SuppressLint("NewApi")
     private void setupHeader(final RecyclerView recycler) {
         recycler.setOnScrollListener(new RecyclerView.OnScrollListener() {
             @Override
