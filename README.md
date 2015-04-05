@@ -95,7 +95,7 @@ You can grab the library via Maven Central. Just add a proper dependency inside 
 
 ```xml
 dependencies {
-    compile 'com.bartoszlipinski.recyclerviewheader:library:1.0.1'
+    compile 'com.bartoszlipinski.recyclerviewheader:library:1.1.0'
 }
 ```
 
