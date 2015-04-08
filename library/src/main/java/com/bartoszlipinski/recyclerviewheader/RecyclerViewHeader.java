@@ -25,6 +25,7 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.AttributeSet;
 import android.view.Gravity;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewParent;
@@ -39,8 +40,13 @@ import android.widget.RelativeLayout;
  */
 public class RecyclerViewHeader extends RelativeLayout {
 
-    private boolean mAlreadyAligned;
+    private RecyclerView mRecycler;
+
+    private int mDownScroll;
     private int mCurrentScroll;
+
+    private boolean mAlreadyAligned;
+    private boolean mRecyclerWantsTouchEvent;
 
     /**
      * Inflates layout from <code>xml</code> and encapsulates it with <code>RecyclerViewHeader</code>.
@@ -92,6 +98,7 @@ public class RecyclerViewHeader extends RelativeLayout {
     public void attachTo(RecyclerView recycler, boolean headerAlreadyAligned) {
         validateRecycler(recycler, headerAlreadyAligned);
 
+        mRecycler = recycler;
         mAlreadyAligned = headerAlreadyAligned;
 
         setupAlignment(recycler);
@@ -124,17 +131,17 @@ public class RecyclerViewHeader extends RelativeLayout {
             RecyclerViewHeader.this.setLayoutParams(newHeaderParams);
 
             //setting alignment of recycler
-            FrameLayout newParent = new FrameLayout(recycler.getContext());
-            newParent.setLayoutParams(recycler.getLayoutParams());
+            FrameLayout newRootParent = new FrameLayout(recycler.getContext());
+            newRootParent.setLayoutParams(recycler.getLayoutParams());
             ViewParent currentParent = recycler.getParent();
             if (currentParent instanceof ViewGroup) {
                 int indexWithinParent = ((ViewGroup) currentParent).indexOfChild(recycler);
 
                 ((ViewGroup) currentParent).removeViewAt(indexWithinParent);
                 recycler.setLayoutParams(new FrameLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
-                newParent.addView(recycler);
-                newParent.addView(RecyclerViewHeader.this);
-                ((ViewGroup) currentParent).addView(newParent, indexWithinParent);
+                newRootParent.addView(recycler);
+                newRootParent.addView(RecyclerViewHeader.this);
+                ((ViewGroup) currentParent).addView(newRootParent, indexWithinParent);
             }
         }
     }
@@ -146,7 +153,6 @@ public class RecyclerViewHeader extends RelativeLayout {
             public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
                 super.onScrolled(recyclerView, dx, dy);
                 mCurrentScroll += dy;
-
                 RecyclerViewHeader.this.setTranslationY(-mCurrentScroll);
             }
         });
@@ -229,6 +235,28 @@ public class RecyclerViewHeader extends RelativeLayout {
                         "can only be used for RecyclerView with a parent of one of types: LinearLayout, FrameLayout, RelativeLayout.");
             }
         }
+    }
+
+    @Override
+    public boolean onInterceptTouchEvent(MotionEvent ev) {
+        mRecyclerWantsTouchEvent = mRecycler.onInterceptTouchEvent(ev);
+        if (mRecyclerWantsTouchEvent && ev.getAction() == MotionEvent.ACTION_DOWN) {
+            mDownScroll = mCurrentScroll;
+        }
+        return mRecyclerWantsTouchEvent || super.onInterceptTouchEvent(ev);
+    }
+
+    @Override
+    public boolean onTouchEvent(MotionEvent event) {
+        if (mRecyclerWantsTouchEvent) {
+            int scrollDiff = mCurrentScroll - mDownScroll;
+            MotionEvent recyclerEvent =
+                    MotionEvent.obtain(event.getDownTime(), event.getEventTime(), event.getAction(),
+                            event.getX(), event.getY() - scrollDiff, event.getMetaState());
+            mRecycler.onTouchEvent(recyclerEvent);
+            return false;
+        }
+        return super.onTouchEvent(event);
     }
 
     private class HeaderItemDecoration extends RecyclerView.ItemDecoration {
