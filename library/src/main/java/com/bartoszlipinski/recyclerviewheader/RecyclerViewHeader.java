@@ -23,6 +23,7 @@ import android.support.annotation.LayoutRes;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.util.AttributeSet;
 import android.view.Gravity;
 import android.view.MotionEvent;
@@ -44,7 +45,7 @@ public class RecyclerViewHeader extends RelativeLayout {
 
     private int mDownScroll;
     private int mCurrentScroll;
-
+    private boolean mReversed;
     private boolean mAlreadyAligned;
     private boolean mRecyclerWantsTouchEvent;
 
@@ -100,33 +101,38 @@ public class RecyclerViewHeader extends RelativeLayout {
 
         mRecycler = recycler;
         mAlreadyAligned = headerAlreadyAligned;
+        mReversed = isLayoutManagerReversed(recycler);
 
         setupAlignment(recycler);
         setupHeader(recycler);
     }
 
+    private boolean isLayoutManagerReversed(RecyclerView recycler) {
+        boolean reversed = false;
+        RecyclerView.LayoutManager manager = recycler.getLayoutManager();
+        if (manager instanceof LinearLayoutManager) {
+            reversed = ((LinearLayoutManager) manager).getReverseLayout();
+        } else if (manager instanceof StaggeredGridLayoutManager) {
+            reversed = ((StaggeredGridLayoutManager) manager).getReverseLayout();
+        }
+        return reversed;
+    }
+
     private void setupAlignment(RecyclerView recycler) {
         if (!mAlreadyAligned) {
             //setting alignment of header
-            ViewGroup.LayoutParams headerParams = getLayoutParams();
+            ViewGroup.LayoutParams currentParams = getLayoutParams();
             FrameLayout.LayoutParams newHeaderParams;
-            if (headerParams != null) {
-                newHeaderParams = new FrameLayout.LayoutParams(headerParams);
-                if (headerParams instanceof LinearLayout.LayoutParams) {
-                    newHeaderParams.gravity = ((LinearLayout.LayoutParams) headerParams).gravity;
-                    newHeaderParams.bottomMargin = ((LinearLayout.LayoutParams) headerParams).bottomMargin;
-                    newHeaderParams.topMargin = ((LinearLayout.LayoutParams) headerParams).topMargin;
-                    newHeaderParams.leftMargin = ((LinearLayout.LayoutParams) headerParams).leftMargin;
-                    newHeaderParams.rightMargin = ((LinearLayout.LayoutParams) headerParams).rightMargin;
-                } else if (headerParams instanceof RelativeLayout.LayoutParams) {
-                    newHeaderParams.gravity = convertRulesToGravity(((RelativeLayout.LayoutParams) headerParams).getRules());
-                    newHeaderParams.bottomMargin = ((RelativeLayout.LayoutParams) headerParams).bottomMargin;
-                    newHeaderParams.topMargin = ((RelativeLayout.LayoutParams) headerParams).topMargin;
-                    newHeaderParams.leftMargin = ((RelativeLayout.LayoutParams) headerParams).leftMargin;
-                    newHeaderParams.rightMargin = ((RelativeLayout.LayoutParams) headerParams).rightMargin;
-                }
+            int width = ViewGroup.LayoutParams.WRAP_CONTENT;
+            int height = ViewGroup.LayoutParams.WRAP_CONTENT;
+            int gravity = (mReversed ? Gravity.BOTTOM : Gravity.TOP) | Gravity.CENTER_HORIZONTAL;
+            if (currentParams != null) {
+                newHeaderParams = new FrameLayout.LayoutParams(getLayoutParams()); //to copy all the margins
+                newHeaderParams.width = width;
+                newHeaderParams.height = height;
+                newHeaderParams.gravity = gravity;
             } else {
-                newHeaderParams = new FrameLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT, Gravity.TOP | Gravity.CENTER_HORIZONTAL);
+                newHeaderParams = new FrameLayout.LayoutParams(width, height, gravity);
             }
             RecyclerViewHeader.this.setLayoutParams(newHeaderParams);
 
@@ -178,42 +184,6 @@ public class RecyclerViewHeader extends RelativeLayout {
                 }
             }
         });
-    }
-
-    private int convertRulesToGravity(int[] rules) {
-        int gravity = 0;
-        if (rules.length < RelativeLayout.ALIGN_PARENT_END) {
-            throw new IllegalArgumentException("Argument of convertRulesToGravity(int[] rules) must be an array obtained with getRules() method of RelativeLayout.LayoutParams object.");
-        }
-
-        if (rules[RelativeLayout.ALIGN_PARENT_LEFT] == RelativeLayout.TRUE) {
-            gravity |= Gravity.LEFT;
-        }
-        if (rules[RelativeLayout.ALIGN_PARENT_RIGHT] == RelativeLayout.TRUE) {
-            gravity |= Gravity.RIGHT;
-        }
-        if (rules[RelativeLayout.ALIGN_PARENT_BOTTOM] == RelativeLayout.TRUE) {
-            gravity |= Gravity.BOTTOM;
-        }
-        if (rules[RelativeLayout.ALIGN_PARENT_TOP] == RelativeLayout.TRUE) {
-            gravity |= Gravity.TOP;
-        }
-        if (rules[RelativeLayout.CENTER_IN_PARENT] == RelativeLayout.TRUE) {
-            gravity |= Gravity.CENTER;
-        }
-        if (rules[RelativeLayout.CENTER_HORIZONTAL] == RelativeLayout.TRUE) {
-            gravity |= Gravity.CENTER_HORIZONTAL;
-        }
-        if (rules[RelativeLayout.CENTER_VERTICAL] == RelativeLayout.TRUE) {
-            gravity |= Gravity.CENTER_VERTICAL;
-        }
-        if (rules[RelativeLayout.ALIGN_PARENT_START] == RelativeLayout.TRUE) {
-            gravity |= Gravity.START;
-        }
-        if (rules[RelativeLayout.ALIGN_PARENT_END] == RelativeLayout.TRUE) {
-            gravity |= Gravity.END;
-        }
-        return gravity;
     }
 
     private void validateRecycler(RecyclerView recycler, boolean headerAlreadyAligned) {
@@ -275,10 +245,11 @@ public class RecyclerViewHeader extends RelativeLayout {
         @Override
         public void getItemOffsets(Rect outRect, View view, RecyclerView parent, RecyclerView.State state) {
             super.getItemOffsets(outRect, view, parent, state);
-            if (parent.getChildPosition(view) < mNumberOfChildren) {
-                outRect.top = mHeaderHeight;
+            int value = (parent.getChildLayoutPosition(view) < mNumberOfChildren) ? mHeaderHeight : 0;
+            if (mReversed) {
+                outRect.bottom = value;
             } else {
-                outRect.top = 0;
+                outRect.top = value;
             }
         }
     }

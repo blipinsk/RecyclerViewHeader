@@ -32,13 +32,13 @@ import com.bartoszlipinski.recyclerviewheader.sample.activity.adapter.ColorItems
  * Created by Bartosz Lipinski
  * 01.04.15
  */
-public class RegularApproachFragment extends Fragment {
+public class RegularApproachGridFragment extends Fragment {
 
     private RecyclerViewHeader mRecyclerHeader;
     private RecyclerView mRecycler;
 
-    public static RegularApproachFragment newInstance() {
-        RegularApproachFragment fragment = new RegularApproachFragment();
+    public static RegularApproachGridFragment newInstance() {
+        RegularApproachGridFragment fragment = new RegularApproachGridFragment();
         return fragment;
     }
 
