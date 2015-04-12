@@ -27,13 +27,14 @@ import com.bartoszlipinski.recyclerviewheader.sample.R;
 import com.bartoszlipinski.recyclerviewheader.sample.activity.fragment.AlreadyAlignedApproachFragment;
 import com.bartoszlipinski.recyclerviewheader.sample.activity.fragment.RegularApproachGridFragment;
 import com.bartoszlipinski.recyclerviewheader.sample.activity.fragment.RegularApproachReversedGridFragment;
+import com.bartoszlipinski.recyclerviewheader.sample.activity.fragment.RegularApproachStaggeredGridFragment;
 
 /**
  * Created by Bartosz Lipinski
  * 01.02.15
  */
 public class MainActivity extends FragmentActivity {
-    public static final int FRAGMENT_COUNT = 3;
+    public static final int FRAGMENT_COUNT = 4;
     private ViewPager mViewPager;
 
     @Override
@@ -63,10 +64,10 @@ public class MainActivity extends FragmentActivity {
                 case 1:
                     return AlreadyAlignedApproachFragment.newInstance();
                 case 2:
+                    return RegularApproachStaggeredGridFragment.newInstance();
+                default:
                     return RegularApproachReversedGridFragment.newInstance();
             }
-            //shouldn't get here
-            return RegularApproachGridFragment.newInstance();
         }
 
         @Override

@@ -18,8 +18,8 @@ package com.bartoszlipinski.recyclerviewheader.sample.activity.fragment;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -30,15 +30,15 @@ import com.bartoszlipinski.recyclerviewheader.sample.activity.adapter.ColorItems
 
 /**
  * Created by Bartosz Lipinski
- * 01.04.15
+ * 12.04.15
  */
-public class RegularApproachGridFragment extends Fragment {
+public class RegularApproachStaggeredGridFragment extends Fragment {
 
     private RecyclerViewHeader mRecyclerHeader;
     private RecyclerView mRecycler;
 
-    public static RegularApproachGridFragment newInstance() {
-        RegularApproachGridFragment fragment = new RegularApproachGridFragment();
+    public static RegularApproachStaggeredGridFragment newInstance() {
+        RegularApproachStaggeredGridFragment fragment = new RegularApproachStaggeredGridFragment();
         return fragment;
     }
 
@@ -51,8 +51,8 @@ public class RegularApproachGridFragment extends Fragment {
 
     private void setupViews(View view) {
         mRecycler = (RecyclerView) view.findViewById(R.id.recycler);
-        GridLayoutManager layoutManager = new GridLayoutManager(getActivity(), 3);
-        mRecycler.setLayoutManager(layoutManager);
+        StaggeredGridLayoutManager manager = new StaggeredGridLayoutManager(3, StaggeredGridLayoutManager.VERTICAL);
+        mRecycler.setLayoutManager(manager);
         mRecycler.setAdapter(new ColorItemsAdapter(getActivity(), 21));
 
         mRecyclerHeader = RecyclerViewHeader.fromXml(getActivity(), R.layout.layout_header);

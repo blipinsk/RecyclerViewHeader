@@ -191,8 +191,19 @@ public class RecyclerViewHeader extends RelativeLayout {
         if (layoutManager == null) {
             throw new IllegalStateException("Be sure to call RecyclerViewHeader constructor after setting your RecyclerView's LayoutManager.");
         } else if (layoutManager.getClass() != LinearLayoutManager.class    //not using instanceof on purpose
-                && layoutManager.getClass() != GridLayoutManager.class) {
-            throw new IllegalArgumentException("For now RecyclerViewHeader supports only LinearLayoutManager and GridLayoutManager.");
+                && layoutManager.getClass() != GridLayoutManager.class
+                && !(layoutManager instanceof StaggeredGridLayoutManager)) {
+            throw new IllegalArgumentException("Currently RecyclerViewHeader supports only LinearLayoutManager, GridLayoutManager and StaggeredGridLayoutManager.");
+        }
+
+        if (layoutManager instanceof LinearLayoutManager) {
+            if (((LinearLayoutManager) layoutManager).getOrientation() != LinearLayoutManager.VERTICAL) {
+                throw new IllegalArgumentException("Currently RecyclerViewHeader supports only VERTICAL orientation LayoutManagers.");
+            }
+        } else if (layoutManager instanceof StaggeredGridLayoutManager) {
+            if (((StaggeredGridLayoutManager) layoutManager).getOrientation() != StaggeredGridLayoutManager.VERTICAL) {
+                throw new IllegalArgumentException("Currently RecyclerViewHeader supports only VERTICAL orientation StaggeredGridLayoutManagers.");
+            }
         }
 
         if (!headerAlreadyAligned) {
@@ -201,7 +212,7 @@ public class RecyclerViewHeader extends RelativeLayout {
                     !(parent instanceof LinearLayout) &&
                     !(parent instanceof FrameLayout) &&
                     !(parent instanceof RelativeLayout)) {
-                throw new IllegalStateException("For now, NOT already aligned RecyclerViewHeader " +
+                throw new IllegalStateException("Currently, NOT already aligned RecyclerViewHeader " +
                         "can only be used for RecyclerView with a parent of one of types: LinearLayout, FrameLayout, RelativeLayout.");
             }
         }
@@ -238,6 +249,8 @@ public class RecyclerViewHeader extends RelativeLayout {
                 mNumberOfChildren = 1;
             } else if (layoutManager.getClass() == GridLayoutManager.class) {
                 mNumberOfChildren = ((GridLayoutManager) layoutManager).getSpanCount();
+            } else if (layoutManager instanceof StaggeredGridLayoutManager) {
+                mNumberOfChildren = ((StaggeredGridLayoutManager) layoutManager).getSpanCount();
             }
             mHeaderHeight = height;
         }
