@@ -196,6 +196,16 @@ public class RecyclerViewHeader extends RelativeLayout {
             throw new IllegalArgumentException("Currently RecyclerViewHeader supports only LinearLayoutManager, GridLayoutManager and StaggeredGridLayoutManager.");
         }
 
+        if (layoutManager instanceof LinearLayoutManager) {
+            if (((LinearLayoutManager) layoutManager).getOrientation() != LinearLayoutManager.VERTICAL) {
+                throw new IllegalArgumentException("Currently RecyclerViewHeader supports only VERTICAL orientation LayoutManagers.");
+            }
+        } else if (layoutManager instanceof StaggeredGridLayoutManager) {
+            if (((StaggeredGridLayoutManager) layoutManager).getOrientation() != StaggeredGridLayoutManager.VERTICAL) {
+                throw new IllegalArgumentException("Currently RecyclerViewHeader supports only VERTICAL orientation StaggeredGridLayoutManagers.");
+            }
+        }
+
         if (!headerAlreadyAligned) {
             ViewParent parent = recycler.getParent();
             if (parent != null &&
@@ -239,7 +249,7 @@ public class RecyclerViewHeader extends RelativeLayout {
                 mNumberOfChildren = 1;
             } else if (layoutManager.getClass() == GridLayoutManager.class) {
                 mNumberOfChildren = ((GridLayoutManager) layoutManager).getSpanCount();
-            }else if (layoutManager instanceof StaggeredGridLayoutManager){
+            } else if (layoutManager instanceof StaggeredGridLayoutManager) {
                 mNumberOfChildren = ((StaggeredGridLayoutManager) layoutManager).getSpanCount();
             }
             mHeaderHeight = height;
