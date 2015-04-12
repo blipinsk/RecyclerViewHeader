@@ -23,8 +23,10 @@ import android.support.annotation.LayoutRes;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.util.AttributeSet;
 import android.view.Gravity;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewParent;
@@ -39,8 +41,13 @@ import android.widget.RelativeLayout;
  */
 public class RecyclerViewHeader extends RelativeLayout {
 
-    private boolean mAlreadyAligned;
+    private RecyclerView mRecycler;
+
+    private int mDownScroll;
     private int mCurrentScroll;
+    private boolean mReversed;
+    private boolean mAlreadyAligned;
+    private boolean mRecyclerWantsTouchEvent;
 
     /**
      * Inflates layout from <code>xml</code> and encapsulates it with <code>RecyclerViewHeader</code>.
@@ -92,49 +99,55 @@ public class RecyclerViewHeader extends RelativeLayout {
     public void attachTo(RecyclerView recycler, boolean headerAlreadyAligned) {
         validateRecycler(recycler, headerAlreadyAligned);
 
+        mRecycler = recycler;
         mAlreadyAligned = headerAlreadyAligned;
+        mReversed = isLayoutManagerReversed(recycler);
 
         setupAlignment(recycler);
         setupHeader(recycler);
     }
 
+    private boolean isLayoutManagerReversed(RecyclerView recycler) {
+        boolean reversed = false;
+        RecyclerView.LayoutManager manager = recycler.getLayoutManager();
+        if (manager instanceof LinearLayoutManager) {
+            reversed = ((LinearLayoutManager) manager).getReverseLayout();
+        } else if (manager instanceof StaggeredGridLayoutManager) {
+            reversed = ((StaggeredGridLayoutManager) manager).getReverseLayout();
+        }
+        return reversed;
+    }
+
     private void setupAlignment(RecyclerView recycler) {
         if (!mAlreadyAligned) {
             //setting alignment of header
-            ViewGroup.LayoutParams headerParams = getLayoutParams();
+            ViewGroup.LayoutParams currentParams = getLayoutParams();
             FrameLayout.LayoutParams newHeaderParams;
-            if (headerParams != null) {
-                newHeaderParams = new FrameLayout.LayoutParams(headerParams);
-                if (headerParams instanceof LinearLayout.LayoutParams) {
-                    newHeaderParams.gravity = ((LinearLayout.LayoutParams) headerParams).gravity;
-                    newHeaderParams.bottomMargin = ((LinearLayout.LayoutParams) headerParams).bottomMargin;
-                    newHeaderParams.topMargin = ((LinearLayout.LayoutParams) headerParams).topMargin;
-                    newHeaderParams.leftMargin = ((LinearLayout.LayoutParams) headerParams).leftMargin;
-                    newHeaderParams.rightMargin = ((LinearLayout.LayoutParams) headerParams).rightMargin;
-                } else if (headerParams instanceof RelativeLayout.LayoutParams) {
-                    newHeaderParams.gravity = convertRulesToGravity(((RelativeLayout.LayoutParams) headerParams).getRules());
-                    newHeaderParams.bottomMargin = ((RelativeLayout.LayoutParams) headerParams).bottomMargin;
-                    newHeaderParams.topMargin = ((RelativeLayout.LayoutParams) headerParams).topMargin;
-                    newHeaderParams.leftMargin = ((RelativeLayout.LayoutParams) headerParams).leftMargin;
-                    newHeaderParams.rightMargin = ((RelativeLayout.LayoutParams) headerParams).rightMargin;
-                }
+            int width = ViewGroup.LayoutParams.WRAP_CONTENT;
+            int height = ViewGroup.LayoutParams.WRAP_CONTENT;
+            int gravity = (mReversed ? Gravity.BOTTOM : Gravity.TOP) | Gravity.CENTER_HORIZONTAL;
+            if (currentParams != null) {
+                newHeaderParams = new FrameLayout.LayoutParams(getLayoutParams()); //to copy all the margins
+                newHeaderParams.width = width;
+                newHeaderParams.height = height;
+                newHeaderParams.gravity = gravity;
             } else {
-                newHeaderParams = new FrameLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT, Gravity.TOP | Gravity.CENTER_HORIZONTAL);
+                newHeaderParams = new FrameLayout.LayoutParams(width, height, gravity);
             }
             RecyclerViewHeader.this.setLayoutParams(newHeaderParams);
 
             //setting alignment of recycler
-            FrameLayout newParent = new FrameLayout(recycler.getContext());
-            newParent.setLayoutParams(recycler.getLayoutParams());
+            FrameLayout newRootParent = new FrameLayout(recycler.getContext());
+            newRootParent.setLayoutParams(recycler.getLayoutParams());
             ViewParent currentParent = recycler.getParent();
             if (currentParent instanceof ViewGroup) {
                 int indexWithinParent = ((ViewGroup) currentParent).indexOfChild(recycler);
 
                 ((ViewGroup) currentParent).removeViewAt(indexWithinParent);
                 recycler.setLayoutParams(new FrameLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
-                newParent.addView(recycler);
-                newParent.addView(RecyclerViewHeader.this);
-                ((ViewGroup) currentParent).addView(newParent, indexWithinParent);
+                newRootParent.addView(recycler);
+                newRootParent.addView(RecyclerViewHeader.this);
+                ((ViewGroup) currentParent).addView(newRootParent, indexWithinParent);
             }
         }
     }
@@ -146,7 +159,6 @@ public class RecyclerViewHeader extends RelativeLayout {
             public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
                 super.onScrolled(recyclerView, dx, dy);
                 mCurrentScroll += dy;
-
                 RecyclerViewHeader.this.setTranslationY(-mCurrentScroll);
             }
         });
@@ -174,49 +186,24 @@ public class RecyclerViewHeader extends RelativeLayout {
         });
     }
 
-    private int convertRulesToGravity(int[] rules) {
-        int gravity = 0;
-        if (rules.length < RelativeLayout.ALIGN_PARENT_END) {
-            throw new IllegalArgumentException("Argument of convertRulesToGravity(int[] rules) must be an array obtained with getRules() method of RelativeLayout.LayoutParams object.");
-        }
-
-        if (rules[RelativeLayout.ALIGN_PARENT_LEFT] == RelativeLayout.TRUE) {
-            gravity |= Gravity.LEFT;
-        }
-        if (rules[RelativeLayout.ALIGN_PARENT_RIGHT] == RelativeLayout.TRUE) {
-            gravity |= Gravity.RIGHT;
-        }
-        if (rules[RelativeLayout.ALIGN_PARENT_BOTTOM] == RelativeLayout.TRUE) {
-            gravity |= Gravity.BOTTOM;
-        }
-        if (rules[RelativeLayout.ALIGN_PARENT_TOP] == RelativeLayout.TRUE) {
-            gravity |= Gravity.TOP;
-        }
-        if (rules[RelativeLayout.CENTER_IN_PARENT] == RelativeLayout.TRUE) {
-            gravity |= Gravity.CENTER;
-        }
-        if (rules[RelativeLayout.CENTER_HORIZONTAL] == RelativeLayout.TRUE) {
-            gravity |= Gravity.CENTER_HORIZONTAL;
-        }
-        if (rules[RelativeLayout.CENTER_VERTICAL] == RelativeLayout.TRUE) {
-            gravity |= Gravity.CENTER_VERTICAL;
-        }
-        if (rules[RelativeLayout.ALIGN_PARENT_START] == RelativeLayout.TRUE) {
-            gravity |= Gravity.START;
-        }
-        if (rules[RelativeLayout.ALIGN_PARENT_END] == RelativeLayout.TRUE) {
-            gravity |= Gravity.END;
-        }
-        return gravity;
-    }
-
     private void validateRecycler(RecyclerView recycler, boolean headerAlreadyAligned) {
         RecyclerView.LayoutManager layoutManager = recycler.getLayoutManager();
         if (layoutManager == null) {
             throw new IllegalStateException("Be sure to call RecyclerViewHeader constructor after setting your RecyclerView's LayoutManager.");
         } else if (layoutManager.getClass() != LinearLayoutManager.class    //not using instanceof on purpose
-                && layoutManager.getClass() != GridLayoutManager.class) {
-            throw new IllegalArgumentException("For now RecyclerViewHeader supports only LinearLayoutManager and GridLayoutManager.");
+                && layoutManager.getClass() != GridLayoutManager.class
+                && !(layoutManager instanceof StaggeredGridLayoutManager)) {
+            throw new IllegalArgumentException("Currently RecyclerViewHeader supports only LinearLayoutManager, GridLayoutManager and StaggeredGridLayoutManager.");
+        }
+
+        if (layoutManager instanceof LinearLayoutManager) {
+            if (((LinearLayoutManager) layoutManager).getOrientation() != LinearLayoutManager.VERTICAL) {
+                throw new IllegalArgumentException("Currently RecyclerViewHeader supports only VERTICAL orientation LayoutManagers.");
+            }
+        } else if (layoutManager instanceof StaggeredGridLayoutManager) {
+            if (((StaggeredGridLayoutManager) layoutManager).getOrientation() != StaggeredGridLayoutManager.VERTICAL) {
+                throw new IllegalArgumentException("Currently RecyclerViewHeader supports only VERTICAL orientation StaggeredGridLayoutManagers.");
+            }
         }
 
         if (!headerAlreadyAligned) {
@@ -225,10 +212,32 @@ public class RecyclerViewHeader extends RelativeLayout {
                     !(parent instanceof LinearLayout) &&
                     !(parent instanceof FrameLayout) &&
                     !(parent instanceof RelativeLayout)) {
-                throw new IllegalStateException("For now, NOT already aligned RecyclerViewHeader " +
+                throw new IllegalStateException("Currently, NOT already aligned RecyclerViewHeader " +
                         "can only be used for RecyclerView with a parent of one of types: LinearLayout, FrameLayout, RelativeLayout.");
             }
         }
+    }
+
+    @Override
+    public boolean onInterceptTouchEvent(MotionEvent ev) {
+        mRecyclerWantsTouchEvent = mRecycler.onInterceptTouchEvent(ev);
+        if (mRecyclerWantsTouchEvent && ev.getAction() == MotionEvent.ACTION_DOWN) {
+            mDownScroll = mCurrentScroll;
+        }
+        return mRecyclerWantsTouchEvent || super.onInterceptTouchEvent(ev);
+    }
+
+    @Override
+    public boolean onTouchEvent(MotionEvent event) {
+        if (mRecyclerWantsTouchEvent) {
+            int scrollDiff = mCurrentScroll - mDownScroll;
+            MotionEvent recyclerEvent =
+                    MotionEvent.obtain(event.getDownTime(), event.getEventTime(), event.getAction(),
+                            event.getX(), event.getY() - scrollDiff, event.getMetaState());
+            mRecycler.onTouchEvent(recyclerEvent);
+            return false;
+        }
+        return super.onTouchEvent(event);
     }
 
     private class HeaderItemDecoration extends RecyclerView.ItemDecoration {
@@ -240,6 +249,8 @@ public class RecyclerViewHeader extends RelativeLayout {
                 mNumberOfChildren = 1;
             } else if (layoutManager.getClass() == GridLayoutManager.class) {
                 mNumberOfChildren = ((GridLayoutManager) layoutManager).getSpanCount();
+            } else if (layoutManager instanceof StaggeredGridLayoutManager) {
+                mNumberOfChildren = ((StaggeredGridLayoutManager) layoutManager).getSpanCount();
             }
             mHeaderHeight = height;
         }
@@ -247,10 +258,11 @@ public class RecyclerViewHeader extends RelativeLayout {
         @Override
         public void getItemOffsets(Rect outRect, View view, RecyclerView parent, RecyclerView.State state) {
             super.getItemOffsets(outRect, view, parent, state);
-            if (parent.getChildPosition(view) < mNumberOfChildren) {
-                outRect.top = mHeaderHeight;
+            int value = (parent.getChildLayoutPosition(view) < mNumberOfChildren) ? mHeaderHeight : 0;
+            if (mReversed) {
+                outRect.bottom = value;
             } else {
-                outRect.top = 0;
+                outRect.top = value;
             }
         }
     }

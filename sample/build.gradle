@@ -8,8 +8,8 @@ android {
         applicationId "com.bartoszlipinski.recyclerviewheader.sample"
         minSdkVersion 11
         targetSdkVersion 21
-        versionCode 3
-        versionName "1.1.0"
+        versionCode 4
+        versionName "1.2.0"
     }
     buildTypes {
         release {
