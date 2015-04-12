@@ -25,13 +25,15 @@ import android.support.v4.view.ViewPager;
 
 import com.bartoszlipinski.recyclerviewheader.sample.R;
 import com.bartoszlipinski.recyclerviewheader.sample.activity.fragment.AlreadyAlignedApproachFragment;
-import com.bartoszlipinski.recyclerviewheader.sample.activity.fragment.RegularApproachFragment;
+import com.bartoszlipinski.recyclerviewheader.sample.activity.fragment.RegularApproachGridFragment;
+import com.bartoszlipinski.recyclerviewheader.sample.activity.fragment.RegularApproachReversedGridFragment;
 
 /**
  * Created by Bartosz Lipinski
  * 01.02.15
  */
 public class MainActivity extends FragmentActivity {
+    public static final int FRAGMENT_COUNT = 3;
     private ViewPager mViewPager;
 
     @Override
@@ -43,6 +45,7 @@ public class MainActivity extends FragmentActivity {
     private void setupViews() {
         setContentView(R.layout.activity_main);
         mViewPager = (ViewPager) findViewById(R.id.view_pager);
+        mViewPager.setOffscreenPageLimit(FRAGMENT_COUNT - 1);
         mViewPager.setAdapter(new RecyclerFragmentPagerAdapter(getSupportFragmentManager()));
     }
 
@@ -56,17 +59,19 @@ public class MainActivity extends FragmentActivity {
         public Fragment getItem(int position) {
             switch (position) {
                 case 0:
-                    return RegularApproachFragment.newInstance();
+                    return RegularApproachGridFragment.newInstance();
                 case 1:
                     return AlreadyAlignedApproachFragment.newInstance();
+                case 2:
+                    return RegularApproachReversedGridFragment.newInstance();
             }
             //shouldn't get here
-            return RegularApproachFragment.newInstance();
+            return RegularApproachGridFragment.newInstance();
         }
 
         @Override
         public int getCount() {
-            return 2;
+            return FRAGMENT_COUNT;
         }
     }
 
