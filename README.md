@@ -1,5 +1,10 @@
 RecyclerViewHeader
 ==================
+
+[![License](https://img.shields.io/github/license/blipinsk/RecyclerViewHeader.svg?style=flat)](https://www.apache.org/licenses/LICENSE-2.0)
+[![Android Arsenal](https://img.shields.io/badge/Android%20Arsenal-RecyclerViewHeader-green.svg?style=flat)](http://android-arsenal.com/details/1/1853)
+[![Maven Central](https://img.shields.io/maven-central/v/com.bartoszlipinski.recyclerviewheader/library.svg)](http://gradleplease.appspot.com/#recyclerviewheader)
+
 Super fast and easy way to create header for Android `RecyclerView`.
 
 Let's you create header `View` for any `RecyclerView` that uses `LinearLayoutManager`, `GridLayoutManager` or `StaggeredGridLayoutManager` with just a simple method call.
