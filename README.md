@@ -11,6 +11,17 @@ Let's you create header `View` for any `RecyclerView` that uses `LinearLayoutMan
 
 ![ ](/RecyclerViewHeader.png)
 
+Limitations
+===========
+Although the library is super easy to use, it has some limitations.
+
+`RecyclerViewHeader` is based on a `ViewGroup` being hovered over the `RecyclerView` (and properly shifted on scroll).
+
+You need to bare in mind that the library is created to be used with relatively simple headers.
+
+E.g. if your header uses a complicated `Touch` management system I advice you not to use `RecyclerViewHeader`, but a proper `RecyclerView` `Adapter` that incorporates inflating multiple types of views.
+There are other libraries on github that might be a bit more complicated to use, but implement mentioned approach and will fit your needs better.
+
 Usage
 =====
 *For a working implementation of this library see the `sample/` folder.*
