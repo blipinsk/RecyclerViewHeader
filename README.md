@@ -7,7 +7,7 @@ RecyclerViewHeader
 
 Super fast and easy way to create header for Android `RecyclerView`.
 
-Let's you create header `View` for any `RecyclerView` that uses `LinearLayoutManager`, `GridLayoutManager` or `StaggeredGridLayoutManager` with just a simple method call.
+Lets you create header `View` for any `RecyclerView` that uses `LinearLayoutManager`, `GridLayoutManager` or `StaggeredGridLayoutManager` with just a simple method call.
 
 ![ ](/RecyclerViewHeader.png)
 
