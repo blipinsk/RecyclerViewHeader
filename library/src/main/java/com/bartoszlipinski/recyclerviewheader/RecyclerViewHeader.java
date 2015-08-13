@@ -20,6 +20,7 @@ import android.annotation.SuppressLint;
 import android.content.Context;
 import android.graphics.Rect;
 import android.support.annotation.LayoutRes;
+import android.support.annotation.NonNull;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -154,7 +155,7 @@ public class RecyclerViewHeader extends RelativeLayout {
 
     @SuppressLint("NewApi")
     private void setupHeader(final RecyclerView recycler) {
-        recycler.setOnScrollListener(new RecyclerView.OnScrollListener() {
+        recycler.addOnScrollListener(new RecyclerView.OnScrollListener() {
             @Override
             public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
                 super.onScrolled(recyclerView, dx, dy);
@@ -228,7 +229,7 @@ public class RecyclerViewHeader extends RelativeLayout {
     }
 
     @Override
-    public boolean onTouchEvent(MotionEvent event) {
+    public boolean onTouchEvent(@NonNull MotionEvent event) {
         if (mRecyclerWantsTouchEvent) {
             int scrollDiff = mCurrentScroll - mDownScroll;
             MotionEvent recyclerEvent =
