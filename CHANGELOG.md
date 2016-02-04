@@ -1,3 +1,9 @@
+Version 1.2.1 *(2016-02-04)*
+----------------------------
+
+ * Using `addOnScrollListener` instead of `setOnScrollListener`
+ * `RecyclerView` support library package no longer included in the library
+
 Version 1.2.0 *(2015-04-13)*
 ----------------------------
 
