@@ -104,8 +104,6 @@ Current implementation of the library can be used with `RecyclerViews` that use 
 
 Currently only `vertical` implementations of `LayoutManagers` are supported.
 
-If you are planning to use `setOnScrollListener(...)` method for your `RecyclerView`, be sure to do it before calling `attachTo(...)` method of the `RecyclerViewHeader`.
-
 
 Including In Your Project
 -------------------------
@@ -113,7 +111,7 @@ You can grab the library via Maven Central. Just add a proper dependency inside 
 
 ```xml
 dependencies {
-    compile 'com.bartoszlipinski.recyclerviewheader:library:1.2.0'
+    compile 'com.bartoszlipinski.recyclerviewheader:library:1.2.1'
 }
 ```
 
