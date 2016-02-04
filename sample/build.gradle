@@ -1,15 +1,18 @@
 apply plugin: 'com.android.application'
 
+def cfg = rootProject.ext.configuration
+def libs = rootProject.ext.libraries
+
 android {
-    compileSdkVersion 23
-    buildToolsVersion "23.0.1"
+    compileSdkVersion cfg.compileVersion
+    buildToolsVersion cfg.buildToolsVersion
 
     defaultConfig {
-        applicationId "com.bartoszlipinski.recyclerviewheader.sample"
-        minSdkVersion 11
-        targetSdkVersion 23
-        versionCode 4
-        versionName "1.2.0"
+        applicationId cfg.package
+        minSdkVersion cfg.minSdk
+        targetSdkVersion cfg.targetSdk
+        versionCode cfg.versionCode
+        versionName cfg.versionName
     }
     buildTypes {
         release {
@@ -22,5 +25,6 @@ android {
 dependencies {
     compile fileTree(dir: 'libs', include: ['*.jar'])
     compile project(':library')
-    compile 'com.android.support:appcompat-v7:23.0.1'
+    compile "com.android.support:appcompat-v7:${libs.support}"
+    compile "com.android.support:recyclerview-v7:${libs.support}"
 }
