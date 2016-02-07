@@ -32,17 +32,19 @@ Basically, there are two ways of using `RecyclerViewHeader`.
 
   1. Create an xml layout file for your header (file can contain any type of `View` or `ViewGroup`)
 
-        <FrameLayout
-            android:layout_width="match_parent"
-            android:layout_height="100dp">
+    ```xml
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="100dp">
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:text="header"/>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:text="header"/>
 
-        </FrameLayout>
+    </FrameLayout>
+    ```
 
   2. Create `RecyclerViewHeader` from `xml` using static initializer.
 
@@ -58,31 +60,33 @@ Basically, there are two ways of using `RecyclerViewHeader`.
 
   1. Place `RecyclerViewHeader`layout above your `RecyclerView` at the top part of it.
 
-        <FrameLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+  ```xml
+  <FrameLayout
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content">
 
-            <android.support.v7.widget.RecyclerView
-                android:id="@+id/recycler"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_horizontal|top" />
+      <android.support.v7.widget.RecyclerView
+          android:id="@+id/recycler"
+          android:layout_width="match_parent"
+          android:layout_height="wrap_content"
+          android:layout_gravity="center_horizontal|top" />
 
-            <com.bartoszlipinski.recyclerviewheader.RecyclerViewHeader
-                android:id="@+id/header"
-                android:layout_width="match_parent"
-                android:layout_height="100dp"
-                android:layout_gravity="center_horizontal|top">
+      <com.bartoszlipinski.recyclerviewheader.RecyclerViewHeader
+          android:id="@+id/header"
+          android:layout_width="match_parent"
+          android:layout_height="100dp"
+          android:layout_gravity="center_horizontal|top">
 
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_centerInParent="true"
-                    android:text="header"/>
+          <TextView
+              android:layout_width="wrap_content"
+              android:layout_height="wrap_content"
+              android:layout_centerInParent="true"
+              android:text="header"/>
 
-            </com.bartoszlipinski.recyclerviewheader.RecyclerViewHeader>
+      </com.bartoszlipinski.recyclerviewheader.RecyclerViewHeader>
 
-        </FrameLayout>
+  </FrameLayout>
+  ```
 
   2. Get the `RecyclerViewHeader` view object with:
 
