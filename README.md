@@ -48,13 +48,17 @@ Basically, there are two ways of using `RecyclerViewHeader`.
 
   2. Create `RecyclerViewHeader` from `xml` using static initializer.
 
-        RecyclerViewHeader header = RecyclerViewHeader.fromXml(context, R.layout.header);
+  ```java
+  RecyclerViewHeader header = RecyclerViewHeader.fromXml(context, R.layout.header);
+  ```
 
   3. Attach `RecyclerViewHeader` to your `RecyclerView` and you're done!
 
-        RecyclerView recyclerView = (RecyclerView) findViewById(R.id.recycler_view);
-        // set LayoutManager for your RecyclerView
-        header.attachTo(recyclerView);
+  ```java
+  RecyclerView recyclerView = (RecyclerView) findViewById(R.id.recycler_view);
+  // set LayoutManager for your RecyclerView
+  header.attachTo(recyclerView);
+  ```
 
 **Header-already-aligned approach** (does not introduce any additional `Layouts`):
 
@@ -90,13 +94,17 @@ Basically, there are two ways of using `RecyclerViewHeader`.
 
   2. Get the `RecyclerViewHeader` view object with:
 
-        RecyclerViewHeader header = (RecyclerViewHeader) findViewById(R.id.header);
+  ```java
+  RecyclerViewHeader header = (RecyclerViewHeader) findViewById(R.id.header);
+  ```
 
   3. Attach `RecyclerViewHeader` to your `RecyclerView` (with `attachTo(RecyclerView recycler, boolean headerAlreadyAligned)`) and that's it.
 
-        RecyclerView recyclerView = (RecyclerView) findViewById(R.id.recycler_view);
-        // set LayoutManager for your RecyclerView
-        header.attachTo(recyclerView, true);
+  ```java
+  RecyclerView recyclerView = (RecyclerView) findViewById(R.id.recycler_view);
+  // set LayoutManager for your RecyclerView
+  header.attachTo(recyclerView, true);
+  ```
 
 
 Important notes
