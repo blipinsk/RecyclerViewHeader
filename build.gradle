@@ -3,7 +3,7 @@ ext {
     configuration = [
             package          : "com.bartoszlipinski.recyclerviewheader.sample",
             compileVersion   : 23,
-            buildToolsVersion: "23.0.2",
+            buildToolsVersion: "23.2.0",
             minSdk           : 11,
             targetSdk        : 23,
             versionCode      : 5,
@@ -11,7 +11,7 @@ ext {
     ]
 
     libraries = [
-            support: "23.1.1",
+            support: "23.2.0",
     ]
 }
 
