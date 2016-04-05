@@ -4,7 +4,7 @@ ext {
             package          : "com.bartoszlipinski.recyclerviewheader.sample",
             compileVersion   : 23,
             buildToolsVersion: "23.0.2",
-            minSdk           : 11,
+            minSdk           : 14,
             targetSdk        : 23,
             versionCode      : 5,
             versionName      : "1.2.1"

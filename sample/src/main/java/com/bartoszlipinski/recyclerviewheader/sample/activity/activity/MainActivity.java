@@ -24,17 +24,16 @@ import android.support.v4.app.FragmentStatePagerAdapter;
 import android.support.v4.view.ViewPager;
 
 import com.bartoszlipinski.recyclerviewheader.sample.R;
-import com.bartoszlipinski.recyclerviewheader.sample.activity.fragment.AlreadyAlignedApproachFragment;
-import com.bartoszlipinski.recyclerviewheader.sample.activity.fragment.RegularApproachGridFragment;
 import com.bartoszlipinski.recyclerviewheader.sample.activity.fragment.RegularApproachReversedGridFragment;
-import com.bartoszlipinski.recyclerviewheader.sample.activity.fragment.RegularApproachStaggeredGridFragment;
+import com.bartoszlipinski.recyclerviewheader.sample.activity.fragment.VersionTwoReversedTestFragment;
+import com.bartoszlipinski.recyclerviewheader.sample.activity.fragment.VersionTwoTestFragment;
 
 /**
  * Created by Bartosz Lipinski
  * 01.02.15
  */
 public class MainActivity extends FragmentActivity {
-    public static final int FRAGMENT_COUNT = 4;
+    public static final int FRAGMENT_COUNT = 2;
     private ViewPager mViewPager;
 
     @Override
@@ -46,7 +45,7 @@ public class MainActivity extends FragmentActivity {
     private void setupViews() {
         setContentView(R.layout.activity_main);
         mViewPager = (ViewPager) findViewById(R.id.view_pager);
-        mViewPager.setOffscreenPageLimit(FRAGMENT_COUNT - 1);
+//        mViewPager.setOffscreenPageLimit(FRAGMENT_COUNT - 1);
         mViewPager.setAdapter(new RecyclerFragmentPagerAdapter(getSupportFragmentManager()));
     }
 
@@ -60,11 +59,15 @@ public class MainActivity extends FragmentActivity {
         public Fragment getItem(int position) {
             switch (position) {
                 case 0:
-                    return RegularApproachGridFragment.newInstance();
+                    return VersionTwoTestFragment.newInstance();
                 case 1:
-                    return AlreadyAlignedApproachFragment.newInstance();
-                case 2:
-                    return RegularApproachStaggeredGridFragment.newInstance();
+                    return VersionTwoReversedTestFragment.newInstance();
+//                case 1:
+//                    return RegularApproachGridFragment.newInstance();
+//                case 2:
+//                    return AlreadyAlignedApproachFragment.newInstance();
+//                case 3:
+//                    return RegularApproachStaggeredGridFragment.newInstance();
                 default:
                     return RegularApproachReversedGridFragment.newInstance();
             }
@@ -75,5 +78,4 @@ public class MainActivity extends FragmentActivity {
             return FRAGMENT_COUNT;
         }
     }
-
 }
