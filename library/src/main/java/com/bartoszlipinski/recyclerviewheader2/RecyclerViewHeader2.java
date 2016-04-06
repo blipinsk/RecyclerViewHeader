@@ -17,6 +17,7 @@ package com.bartoszlipinski.recyclerviewheader2;
 
 import android.content.Context;
 import android.graphics.Rect;
+import android.support.annotation.CallSuper;
 import android.support.annotation.IntDef;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -56,15 +57,12 @@ public class RecyclerViewHeader2 extends RelativeLayout {
         super(context, attrs, defStyle);
     }
 
-    @Override
-    protected final void onLayout(boolean changed, int l, int t, int r, int b) {
-        super.onLayout(changed, l, t, r, b);
-        if (changed && isAttachedToRecycler) {
-            recyclerView.onHeaderSizeChanged(l, t, r, b);
-            onScrollChanged();
-        }
-    }
-
+    /**
+     * Attaches <code>RecyclerViewHeader</code> to <code>RecyclerView</code>.
+     * Be sure that <code>setLayoutManager(...)</code> has been called for <code>RecyclerView</code> before calling this method.
+     *
+     * @param recycler <code>RecyclerView</code> to attach <code>RecyclerViewHeader</code> to.
+     */
     public final void attachTo(@NonNull final RecyclerView recycler) {
         validate(recycler);
         this.recyclerView = RecyclerViewDelegate.with(recycler);
@@ -96,6 +94,9 @@ public class RecyclerViewHeader2 extends RelativeLayout {
         });
     }
 
+    /**
+     * Detaches <code>RecyclerViewHeader</code> from <code>RecyclerView</code>.
+     */
     public final void detach() {
         if (isAttachedToRecycler) {
             isAttachedToRecycler = false;
@@ -140,6 +141,16 @@ public class RecyclerViewHeader2 extends RelativeLayout {
     }
 
     @Override
+    protected final void onLayout(boolean changed, int l, int t, int r, int b) {
+        super.onLayout(changed, l, t, r, b);
+        if (changed && isAttachedToRecycler) {
+            recyclerView.onHeaderSizeChanged(l, t, r, b);
+            onScrollChanged();
+        }
+    }
+
+    @Override
+    @CallSuper
     public boolean onInterceptTouchEvent(MotionEvent ev) {
         recyclerWantsTouch = isAttachedToRecycler && recyclerView.onInterceptTouchEvent(ev);
         if (recyclerWantsTouch && ev.getAction() == MotionEvent.ACTION_DOWN) {
@@ -149,6 +160,7 @@ public class RecyclerViewHeader2 extends RelativeLayout {
     }
 
     @Override
+    @CallSuper
     public boolean onTouchEvent(@NonNull MotionEvent event) {
         if (recyclerWantsTouch) { // this cannot be true if recycler is not attached
             int scrollDiff = downTranslation - calculateTranslation();
@@ -169,7 +181,7 @@ public class RecyclerViewHeader2 extends RelativeLayout {
 
     private void validate(RecyclerView recyclerView) {
         if (recyclerView.getLayoutManager() == null) {
-            throw new IllegalStateException("Be sure to call RecyclerViewHeader constructor after setting your RecyclerView's LayoutManager.");
+            throw new IllegalStateException("Be sure to attach RecyclerViewHeader after setting your RecyclerView's LayoutManager.");
         }
     }
 
