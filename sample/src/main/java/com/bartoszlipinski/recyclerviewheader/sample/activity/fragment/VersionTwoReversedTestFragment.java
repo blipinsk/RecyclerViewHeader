@@ -41,5 +41,4 @@ public class VersionTwoReversedTestFragment extends Fragment {
         recyclerHeader = (RecyclerViewHeader2) view.findViewById(R.id.header);
         recyclerHeader.attachTo(recycler);
     }
-
 }

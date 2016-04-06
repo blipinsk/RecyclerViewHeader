@@ -140,12 +140,6 @@ public class RecyclerViewHeader2 extends RelativeLayout {
     }
 
     @Override
-    protected void onAttachedToWindow() {
-        super.onAttachedToWindow();
-        recyclerView.recyclerView.invalidateItemDecorations();
-    }
-
-    @Override
     public boolean onInterceptTouchEvent(MotionEvent ev) {
         recyclerWantsTouch = isAttachedToRecycler && recyclerView.onInterceptTouchEvent(ev);
         if (recyclerWantsTouch && ev.getAction() == MotionEvent.ACTION_DOWN) {
