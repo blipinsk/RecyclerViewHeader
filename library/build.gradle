@@ -24,7 +24,6 @@ android {
 dependencies {
     compile fileTree(dir: 'libs', include: ['*.jar'])
     provided "com.android.support:recyclerview-v7:${libs.support}"
-    compile 'com.bartoszlipinski:viewpropertyobjectanimator:1.4.4'
 }
 
 apply from: '../gradle-mvn-push.gradle'

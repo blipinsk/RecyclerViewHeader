@@ -36,7 +36,7 @@ public class VersionTwoTestFragment extends Fragment {
     private void setupViews(View view) {
         recycler = (RecyclerView) view.findViewById(R.id.recycler);
         recycler.setLayoutManager(new LinearLayoutManager(getActivity()));
-        recycler.setAdapter(new ColorItemsAdapter(getActivity(), 110));
+        recycler.setAdapter(new ColorItemsAdapter(getActivity(), 10));
 
         recyclerHeader = (RecyclerViewHeader2) view.findViewById(R.id.header);
         recyclerHeader.attachTo(recycler);

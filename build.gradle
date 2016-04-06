@@ -11,7 +11,7 @@ ext {
     ]
 
     libraries = [
-            support: "23.1.1",
+            support: "23.2.1",
     ]
 }
 

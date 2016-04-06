@@ -1,4 +1,4 @@
-/**
+/*
  * Copyright 2015 Bartosz Lipinski
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -13,7 +13,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 package com.bartoszlipinski.recyclerviewheader.sample.activity.activity;
 
 import android.os.Bundle;
@@ -33,7 +32,7 @@ import com.bartoszlipinski.recyclerviewheader.sample.activity.fragment.VersionTw
  */
 public class MainActivity extends FragmentActivity {
     public static final int FRAGMENT_COUNT = 4;
-    private ViewPager mViewPager;
+    private ViewPager viewPager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,9 +42,9 @@ public class MainActivity extends FragmentActivity {
 
     private void setupViews() {
         setContentView(R.layout.activity_main);
-        mViewPager = (ViewPager) findViewById(R.id.view_pager);
-//        mViewPager.setOffscreenPageLimit(FRAGMENT_COUNT - 1);
-        mViewPager.setAdapter(new RecyclerFragmentPagerAdapter(getSupportFragmentManager()));
+        viewPager = (ViewPager) findViewById(R.id.view_pager);
+//        viewPager.setOffscreenPageLimit(FRAGMENT_COUNT - 1);
+        viewPager.setAdapter(new RecyclerFragmentPagerAdapter(getSupportFragmentManager()));
     }
 
     private class RecyclerFragmentPagerAdapter extends FragmentStatePagerAdapter {

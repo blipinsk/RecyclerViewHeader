@@ -1,19 +1,18 @@
-/**
- * Copyright 2016 Bartosz Lipinski
- * <p>
+/*
+ * Copyright 2015 Bartosz Lipinski
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * <p>
+ *
  * http://www.apache.org/licenses/LICENSE-2.0
- * <p>
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 package com.bartoszlipinski.recyclerviewheader2;
 
 import android.content.Context;
@@ -26,7 +25,6 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.RelativeLayout;
@@ -34,10 +32,6 @@ import android.widget.RelativeLayout;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 
-/**
- * Created by Bartosz Lipinski
- * 31.03.15
- */
 public class RecyclerViewHeader2 extends RelativeLayout {
 
     @Visibility
@@ -65,14 +59,13 @@ public class RecyclerViewHeader2 extends RelativeLayout {
     @Override
     protected final void onLayout(boolean changed, int l, int t, int r, int b) {
         super.onLayout(changed, l, t, r, b);
-        Log.d("TEST", "" + changed + " " + l + " " + t + " " + r + " " + b);
         if (changed && isAttachedToRecycler) {
             recyclerView.onHeaderSizeChanged(l, t, r, b);
             onScrollChanged();
         }
     }
 
-    public final void attachTo(@NonNull RecyclerView recycler) {
+    public final void attachTo(@NonNull final RecyclerView recycler) {
         validate(recycler);
         this.recyclerView = RecyclerViewDelegate.with(recycler);
         this.layoutManager = LayoutManagerDelegate.with(recycler.getLayoutManager());
@@ -85,7 +78,32 @@ public class RecyclerViewHeader2 extends RelativeLayout {
                 onScrollChanged();
             }
         });
-        requestLayout();
+        recyclerView.setOnChildAttachListener(new RecyclerView.OnChildAttachStateChangeListener() {
+            @Override
+            public void onChildViewAttachedToWindow(View view) {
+            }
+
+            @Override
+            public void onChildViewDetachedFromWindow(View view) {
+                recycler.post(new Runnable() {
+                    @Override
+                    public void run() {
+                        recyclerView.invalidateItemDecorations();
+                        onScrollChanged();
+                    }
+                });
+            }
+        });
+    }
+
+    public final void detach() {
+        if (isAttachedToRecycler) {
+            isAttachedToRecycler = false;
+            recyclerWantsTouch = false;
+            recyclerView.reset();
+            recyclerView = null;
+            layoutManager = null;
+        }
     }
 
     private void onScrollChanged() {
@@ -98,16 +116,6 @@ public class RecyclerViewHeader2 extends RelativeLayout {
             } else {
                 setTranslationX(translation);
             }
-        }
-    }
-
-    public final void detach() {
-        if (isAttachedToRecycler) {
-            isAttachedToRecycler = false;
-            recyclerWantsTouch = false;
-            recyclerView.reset();
-            recyclerView = null;
-            layoutManager = null;
         }
     }
 
@@ -205,10 +213,12 @@ public class RecyclerViewHeader2 extends RelativeLayout {
     }
 
     private static class RecyclerViewDelegate {
+
         @NonNull
         private final RecyclerView recyclerView;
-        private RecyclerView.OnScrollListener onScrollListener;
         private HeaderItemDecoration decoration;
+        private RecyclerView.OnScrollListener onScrollListener;
+        private RecyclerView.OnChildAttachStateChangeListener onChildAttachListener;
 
         private RecyclerViewDelegate(final @NonNull RecyclerView recyclerView) {
             this.recyclerView = recyclerView;
@@ -225,11 +235,15 @@ public class RecyclerViewHeader2 extends RelativeLayout {
                 recyclerView.post(new Runnable() {
                     @Override
                     public void run() {
-                        if (!recyclerView.isComputingLayout()) {
-                            recyclerView.invalidateItemDecorations();
-                        }
+                        invalidateItemDecorations();
                     }
                 });
+            }
+        }
+
+        private void invalidateItemDecorations() {
+            if (!recyclerView.isComputingLayout()) {
+                recyclerView.invalidateItemDecorations();
             }
         }
 
@@ -269,9 +283,23 @@ public class RecyclerViewHeader2 extends RelativeLayout {
             }
         }
 
+        public final void setOnChildAttachListener(RecyclerView.OnChildAttachStateChangeListener onChildAttachListener) {
+            clearOnChildAttachListener();
+            this.onChildAttachListener = onChildAttachListener;
+            recyclerView.addOnChildAttachStateChangeListener(this.onChildAttachListener);
+        }
+
+        public final void clearOnChildAttachListener() {
+            if (onChildAttachListener != null) {
+                recyclerView.removeOnChildAttachStateChangeListener(onChildAttachListener);
+                onChildAttachListener = null;
+            }
+        }
+
         public final void reset() {
             clearHeaderDecoration();
             clearOnScrollListener();
+            clearOnChildAttachListener();
         }
 
         public boolean onInterceptTouchEvent(MotionEvent ev) {
@@ -281,6 +309,7 @@ public class RecyclerViewHeader2 extends RelativeLayout {
         public boolean onTouchEvent(MotionEvent ev) {
             return recyclerView.onTouchEvent(ev);
         }
+
     }
 
     private static class LayoutManagerDelegate {
