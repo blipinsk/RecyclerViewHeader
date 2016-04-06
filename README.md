@@ -7,7 +7,7 @@ RecyclerViewHeader
 
 Super fast and easy way to create header for Android `RecyclerView`.
 
-Lets you create header `View` for any `RecyclerView` that uses `LinearLayoutManager`, `GridLayoutManager` with just a simple method call.
+Lets you create header `View` for any `RecyclerView` that uses `LinearLayoutManager` or `GridLayoutManager` with just a simple method call.
 
 ![ ](/RecyclerViewHeader.png)
 
@@ -23,10 +23,10 @@ E.g. if your header uses a complex layout (with multiple scrolls and focusable e
 There are other libraries on github (for example [HeaderRecyclerView by Karumi][1]) that might seem a bit more complicated to use, but are implementing mentioned approach and will fit your needs better.
 
 On version 2
-============
+------------
 I created this library back in the day when I thought `RecyclerView` was all new and difficult. Writing an adapter that could inflate multiple types of `Views` seemed like a difficult job to do.
 Not long after I released `RecyclerViewHeader` I found out that's an incredibly easy task to perform especially if you have tools like [`HeaderRecyclerView` by Karumi][1].
-Using a specialized adapter was fixing all flaws that `RecyclerViewHeader` was suffering from.
+Using a specialized adapter was fixing all the flaws that `RecyclerViewHeader` was suffering from.
 
 The aim of the second version was to fix all the issues users were facing. The problem is, while I was developing the second version, I was thinking about killing this library multiple times. 
 I was finding multiple aspects of the approach it presents, to be problematic for someone who doesn't understand the concept of the library thoroughly (usage with simple headers).
@@ -84,7 +84,7 @@ Important notes
 
 `RecyclerViewHeader` needs to be called after you've set the `LayoutManager` for your `RecyclerView`.
 
-Current implementation of the library can be used with `RecyclerViews` that use `LinearLayoutManager`, `GridLayoutManager`.
+Current implementation of the library can be used with `RecyclerViews` that use `LinearLayoutManager` or `GridLayoutManager`.
 
 
 Including In Your Project
