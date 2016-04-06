@@ -1,10 +1,10 @@
 // Top-level build file where you can add configuration options common to all sub-projects/modules.
 ext {
     configuration = [
-            package          : "com.bartoszlipinski.recyclerviewheader.sample",
+            package          : "com.bartoszlipinski.recyclerviewheader2.sample",
             compileVersion   : 23,
             buildToolsVersion: "23.0.2",
-            minSdk           : 14,
+            minSdk           : 11,
             targetSdk        : 23,
             versionCode      : 5,
             versionName      : "1.2.1"

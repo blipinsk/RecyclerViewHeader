@@ -33,7 +33,7 @@ import android.widget.RelativeLayout;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 
-public class RecyclerViewHeader2 extends RelativeLayout {
+public class RecyclerViewHeader extends RelativeLayout {
 
     @Visibility
     private int intendedVisibility = VISIBLE;
@@ -45,15 +45,15 @@ public class RecyclerViewHeader2 extends RelativeLayout {
     private RecyclerViewDelegate recyclerView;
     private LayoutManagerDelegate layoutManager;
 
-    public RecyclerViewHeader2(Context context) {
+    public RecyclerViewHeader(Context context) {
         super(context);
     }
 
-    public RecyclerViewHeader2(Context context, AttributeSet attrs) {
+    public RecyclerViewHeader(Context context, AttributeSet attrs) {
         super(context, attrs);
     }
 
-    public RecyclerViewHeader2(Context context, AttributeSet attrs, int defStyle) {
+    public RecyclerViewHeader(Context context, AttributeSet attrs, int defStyle) {
         super(context, attrs, defStyle);
     }
 
@@ -109,7 +109,7 @@ public class RecyclerViewHeader2 extends RelativeLayout {
 
     private void onScrollChanged() {
         hidden = !layoutManager.isFirstRowVisible();
-        RecyclerViewHeader2.super.setVisibility(hidden ? INVISIBLE : intendedVisibility);
+        RecyclerViewHeader.super.setVisibility(hidden ? INVISIBLE : intendedVisibility);
         if (!hidden) {
             final int translation = calculateTranslation();
             if (isVertical) {
@@ -144,7 +144,14 @@ public class RecyclerViewHeader2 extends RelativeLayout {
     protected final void onLayout(boolean changed, int l, int t, int r, int b) {
         super.onLayout(changed, l, t, r, b);
         if (changed && isAttachedToRecycler) {
-            recyclerView.onHeaderSizeChanged(l, t, r, b);
+            int verticalMargins = 0;
+            int horizontalMargins = 0;
+            if (getLayoutParams() instanceof MarginLayoutParams) {
+                final MarginLayoutParams layoutParams = (MarginLayoutParams) getLayoutParams();
+                verticalMargins = layoutParams.topMargin + layoutParams.bottomMargin;
+                horizontalMargins = layoutParams.leftMargin + layoutParams.rightMargin;
+            }
+            recyclerView.onHeaderSizeChanged(getHeight() + verticalMargins, getWidth() + horizontalMargins);
             onScrollChanged();
         }
     }
@@ -234,10 +241,10 @@ public class RecyclerViewHeader2 extends RelativeLayout {
             return new RecyclerViewDelegate(recyclerView);
         }
 
-        public final void onHeaderSizeChanged(int left, int top, int right, int bottom) {
+        public final void onHeaderSizeChanged(int height, int width) {
             if (decoration != null) {
-                decoration.setHeight(bottom - top);
-                decoration.setWidth(right - left);
+                decoration.setHeight(height);
+                decoration.setWidth(width);
                 recyclerView.post(new Runnable() {
                     @Override
                     public void run() {

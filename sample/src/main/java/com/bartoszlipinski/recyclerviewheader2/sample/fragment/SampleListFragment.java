@@ -1,4 +1,4 @@
-/**
+/*
  * Copyright 2015 Bartosz Lipinski
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -13,8 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
-package com.bartoszlipinski.recyclerviewheader.sample.activity.fragment;
+package com.bartoszlipinski.recyclerviewheader2.sample.fragment;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -24,38 +23,38 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.bartoszlipinski.recyclerviewheader.RecyclerViewHeader;
-import com.bartoszlipinski.recyclerviewheader.sample.R;
-import com.bartoszlipinski.recyclerviewheader.sample.activity.adapter.ColorItemsAdapter;
+import com.bartoszlipinski.recyclerviewheader2.RecyclerViewHeader;
+import com.bartoszlipinski.recyclerviewheader2.sample.R;
+import com.bartoszlipinski.recyclerviewheader2.sample.adapter.ColorItemsAdapter;
 
 /**
  * Created by Bartosz Lipinski
  * 01.04.15
  */
-public class AlreadyAlignedApproachFragment extends Fragment {
+public class SampleListFragment extends Fragment {
 
-    private RecyclerViewHeader mRecyclerHeader;
-    private RecyclerView mRecycler;
+    private RecyclerViewHeader recyclerHeader;
+    private RecyclerView recycler;
 
-    public static AlreadyAlignedApproachFragment newInstance() {
-        AlreadyAlignedApproachFragment fragment = new AlreadyAlignedApproachFragment();
+    public static SampleListFragment newInstance() {
+        SampleListFragment fragment = new SampleListFragment();
         return fragment;
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_already_aligned_approach, container, false);
+        View view = inflater.inflate(R.layout.fragment_sample, container, false);
         setupViews(view);
         return view;
     }
 
     private void setupViews(View view) {
-        mRecycler = (RecyclerView) view.findViewById(R.id.recycler);
-        mRecycler.setLayoutManager(new LinearLayoutManager(getActivity()));
-        mRecycler.setAdapter(new ColorItemsAdapter(getActivity(), 10));
+        recycler = (RecyclerView) view.findViewById(R.id.recycler);
+        recycler.setLayoutManager(new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false));
+        recycler.setAdapter(new ColorItemsAdapter(getActivity(), 21));
 
-        mRecyclerHeader = (RecyclerViewHeader) view.findViewById(R.id.header);
-        mRecyclerHeader.attachTo(mRecycler, true);
+        recyclerHeader = (RecyclerViewHeader) view.findViewById(R.id.header);
+        recyclerHeader.attachTo(recycler);
     }
 
 }

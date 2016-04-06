@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.bartoszlipinski.recyclerviewheader.sample.activity.adapter;
+package com.bartoszlipinski.recyclerviewheader2.sample.adapter;
 
 import android.content.Context;
 import android.graphics.Color;
@@ -25,8 +25,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.bartoszlipinski.recyclerviewheader.sample.R;
-import com.bartoszlipinski.recyclerviewheader.sample.activity.utilities.ValueInterpolator;
+import com.bartoszlipinski.recyclerviewheader2.sample.R;
+import com.bartoszlipinski.recyclerviewheader2.sample.utilities.ValueInterpolator;
 
 public class ColorItemsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
