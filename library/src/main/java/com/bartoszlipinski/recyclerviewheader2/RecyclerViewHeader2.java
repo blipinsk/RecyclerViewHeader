@@ -212,23 +212,6 @@ public class RecyclerViewHeader2 extends RelativeLayout {
 
         private RecyclerViewDelegate(final @NonNull RecyclerView recyclerView) {
             this.recyclerView = recyclerView;
-            recyclerView.addOnLayoutChangeListener(new OnLayoutChangeListener() {
-                @Override
-                public void onLayoutChange(View v, int left, int top, int right, int bottom, int oldLeft, int oldTop, int oldRight, int oldBottom) {
-                    recyclerView.invalidateItemDecorations();
-                }
-            });
-            recyclerView.addOnAttachStateChangeListener(new OnAttachStateChangeListener() {
-                @Override
-                public void onViewAttachedToWindow(View v) {
-                    recyclerView.invalidateItemDecorations();
-                }
-
-                @Override
-                public void onViewDetachedFromWindow(View v) {
-
-                }
-            });
         }
 
         public static RecyclerViewDelegate with(@NonNull RecyclerView recyclerView) {
