@@ -21,12 +21,12 @@ import android.graphics.Rect;
 import android.support.annotation.IntDef;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.support.v4.view.ViewCompat;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.RelativeLayout;
@@ -41,14 +41,13 @@ import java.lang.annotation.RetentionPolicy;
 public class RecyclerViewHeader2 extends RelativeLayout {
 
     @Visibility
-    private int intendedVisiblity = VISIBLE;
+    private int intendedVisibility = VISIBLE;
     private int downTranslation;
     private boolean hidden = false;
     private boolean recyclerWantsTouch;
+    private boolean isVertical;
     private boolean isAttachedToRecycler;
-    private RecyclerView recycler;
-    private RecyclerView.OnScrollListener scrollListener;
-    private HeaderItemDecoration decoration;
+    private RecyclerViewDelegate recyclerView;
     private LayoutManagerDelegate layoutManager;
 
     public RecyclerViewHeader2(Context context) {
@@ -66,67 +65,81 @@ public class RecyclerViewHeader2 extends RelativeLayout {
     @Override
     protected final void onLayout(boolean changed, int l, int t, int r, int b) {
         super.onLayout(changed, l, t, r, b);
-        if (changed && ViewCompat.isAttachedToWindow(this) && decoration != null) {
-            decoration.setHeight(b - t);
-            recycler.invalidateItemDecorations();
+        Log.d("TEST", "" + changed + " " + l + " " + t + " " + r + " " + b);
+        if (changed && isAttachedToRecycler) {
+            recyclerView.onHeaderSizeChanged(l, t, r, b);
+            onScrollChanged();
         }
     }
 
     public final void attachTo(@NonNull RecyclerView recycler) {
         validate(recycler);
+        this.recyclerView = RecyclerViewDelegate.with(recycler);
         this.layoutManager = LayoutManagerDelegate.with(recycler.getLayoutManager());
-        this.recycler = recycler;
+        isVertical = layoutManager.isVertical();
         isAttachedToRecycler = true;
-        decoration = new HeaderItemDecoration();
-        scrollListener = new RecyclerView.OnScrollListener() {
+        recyclerView.setHeaderDecoration(new HeaderItemDecoration());
+        recyclerView.setOnScrollListener(new RecyclerView.OnScrollListener() {
             @Override
             public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
-                hidden = !layoutManager.isFirstRowVisible();
-                RecyclerViewHeader2.super.setVisibility(hidden ? INVISIBLE : intendedVisiblity);
-                if (!hidden) {
-                    setTranslationY(calculateTranslation());
-                }
+                onScrollChanged();
             }
-        };
-        recycler.addItemDecoration(decoration, 0);
-        recycler.addOnScrollListener(scrollListener);
+        });
+        requestLayout();
+    }
+
+    private void onScrollChanged() {
+        hidden = !layoutManager.isFirstRowVisible();
+        RecyclerViewHeader2.super.setVisibility(hidden ? INVISIBLE : intendedVisibility);
+        if (!hidden) {
+            final int translation = calculateTranslation();
+            if (isVertical) {
+                setTranslationY(translation);
+            } else {
+                setTranslationX(translation);
+            }
+        }
     }
 
     public final void detach() {
         if (isAttachedToRecycler) {
             isAttachedToRecycler = false;
-            recycler.removeItemDecoration(decoration);
-            recycler.removeOnScrollListener(scrollListener);
-            decoration = null;
-            scrollListener = null;
-            recycler = null;
+            recyclerWantsTouch = false;
+            recyclerView.reset();
+            recyclerView = null;
+            layoutManager = null;
         }
     }
 
     private int calculateTranslation() {
-        int offset = recycler.computeVerticalScrollOffset();
-        int base = layoutManager.isReversed() ?
-                recycler.computeVerticalScrollRange() - recycler.getHeight() : 0;
+        int offset = recyclerView.getScrollOffset(isVertical);
+        int base = layoutManager.isReversed() ? recyclerView.getTranslationBase(isVertical) : 0;
         return base - offset;
     }
 
     @Override
     public final void setVisibility(@Visibility int visibility) {
-        this.intendedVisiblity = visibility;
+        this.intendedVisibility = visibility;
         if (!hidden) {
-            super.setVisibility(intendedVisiblity);
+            super.setVisibility(intendedVisibility);
         }
     }
 
     @Visibility
     @Override
     public final int getVisibility() {
-        return intendedVisiblity;
+        return intendedVisibility;
+    }
+
+    @Override
+    protected void onAttachedToWindow() {
+        super.onAttachedToWindow();
+        recyclerView.recyclerView.invalidateItemDecorations();
     }
 
     @Override
     public boolean onInterceptTouchEvent(MotionEvent ev) {
-        recyclerWantsTouch = isAttachedToRecycler && recycler.onInterceptTouchEvent(ev);
+        recyclerWantsTouch = isAttachedToRecycler && recyclerView.onInterceptTouchEvent(ev);
         if (recyclerWantsTouch && ev.getAction() == MotionEvent.ACTION_DOWN) {
             downTranslation = calculateTranslation();
         }
@@ -135,16 +148,18 @@ public class RecyclerViewHeader2 extends RelativeLayout {
 
     @Override
     public boolean onTouchEvent(@NonNull MotionEvent event) {
-        if (recyclerWantsTouch) { //this cannot be true if recycler is not attached
+        if (recyclerWantsTouch) { // this cannot be true if recycler is not attached
             int scrollDiff = downTranslation - calculateTranslation();
+            int verticalDiff = isVertical ? scrollDiff : 0;
+            int horizontalDiff = isVertical ? 0 : scrollDiff;
             MotionEvent recyclerEvent =
                     MotionEvent.obtain(event.getDownTime(),
                             event.getEventTime(),
                             event.getAction(),
-                            event.getX(),
-                            event.getY() - scrollDiff,
+                            event.getX() - horizontalDiff,
+                            event.getY() - verticalDiff,
                             event.getMetaState());
-            recycler.onTouchEvent(recyclerEvent);
+            recyclerView.onTouchEvent(recyclerEvent);
             return false;
         }
         return super.onTouchEvent(event);
@@ -158,10 +173,15 @@ public class RecyclerViewHeader2 extends RelativeLayout {
 
     private class HeaderItemDecoration extends RecyclerView.ItemDecoration {
         private int headerHeight;
+        private int headerWidth;
         private int firstRowSpan;
 
         public HeaderItemDecoration() {
             firstRowSpan = layoutManager.getFirstRowSpan();
+        }
+
+        public void setWidth(int width) {
+            headerWidth = width;
         }
 
         public void setHeight(int height) {
@@ -171,11 +191,15 @@ public class RecyclerViewHeader2 extends RelativeLayout {
         @Override
         public void getItemOffsets(Rect outRect, View view, RecyclerView parent, RecyclerView.State state) {
             super.getItemOffsets(outRect, view, parent, state);
-            int value = (parent.getChildLayoutPosition(view) < firstRowSpan) ? headerHeight : 0;
+            final boolean headerRelatedPosition = parent.getChildLayoutPosition(view) < firstRowSpan;
+            int heightOffset = headerRelatedPosition && isVertical ? headerHeight : 0;
+            int widthOffset = headerRelatedPosition && !isVertical ? headerWidth : 0;
             if (layoutManager.isReversed()) {
-                outRect.bottom = value;
+                outRect.bottom = heightOffset;
+                outRect.right = widthOffset;
             } else {
-                outRect.top = value;
+                outRect.top = heightOffset;
+                outRect.left = widthOffset;
             }
         }
     }
@@ -186,39 +210,94 @@ public class RecyclerViewHeader2 extends RelativeLayout {
         private RecyclerView.OnScrollListener onScrollListener;
         private HeaderItemDecoration decoration;
 
-        private RecyclerViewDelegate(@NonNull RecyclerView recyclerView) {
+        private RecyclerViewDelegate(final @NonNull RecyclerView recyclerView) {
             this.recyclerView = recyclerView;
+            recyclerView.addOnLayoutChangeListener(new OnLayoutChangeListener() {
+                @Override
+                public void onLayoutChange(View v, int left, int top, int right, int bottom, int oldLeft, int oldTop, int oldRight, int oldBottom) {
+                    recyclerView.invalidateItemDecorations();
+                }
+            });
+            recyclerView.addOnAttachStateChangeListener(new OnAttachStateChangeListener() {
+                @Override
+                public void onViewAttachedToWindow(View v) {
+                    recyclerView.invalidateItemDecorations();
+                }
+
+                @Override
+                public void onViewDetachedFromWindow(View v) {
+
+                }
+            });
         }
 
         public static RecyclerViewDelegate with(@NonNull RecyclerView recyclerView) {
             return new RecyclerViewDelegate(recyclerView);
         }
 
-        public void setHeaderDecoration(HeaderItemDecoration decoration) {
+        public final void onHeaderSizeChanged(int left, int top, int right, int bottom) {
+            if (decoration != null) {
+                decoration.setHeight(bottom - top);
+                decoration.setWidth(right - left);
+                recyclerView.post(new Runnable() {
+                    @Override
+                    public void run() {
+                        if (!recyclerView.isComputingLayout()) {
+                            recyclerView.invalidateItemDecorations();
+                        }
+                    }
+                });
+            }
+        }
+
+        public final int getScrollOffset(boolean isVertical) {
+            return isVertical ? recyclerView.computeVerticalScrollOffset() : recyclerView.computeHorizontalScrollOffset();
+        }
+
+        public final int getTranslationBase(boolean isVertical) {
+            return isVertical ?
+                    recyclerView.computeVerticalScrollRange() - recyclerView.getHeight() :
+                    recyclerView.computeHorizontalScrollRange() - recyclerView.getWidth();
+        }
+
+        public final void setHeaderDecoration(HeaderItemDecoration decoration) {
             clearHeaderDecoration();
             this.decoration = decoration;
             recyclerView.addItemDecoration(this.decoration, 0);
         }
 
-        private void clearHeaderDecoration() {
-            if (this.decoration != null) {
-                recyclerView.removeItemDecoration(this.decoration);
+        public final void clearHeaderDecoration() {
+            if (decoration != null) {
+                recyclerView.removeItemDecoration(decoration);
+                decoration = null;
             }
         }
 
-        public void setOnScrollListener(RecyclerView.OnScrollListener onScrollListener) {
+        public final void setOnScrollListener(RecyclerView.OnScrollListener onScrollListener) {
             clearOnScrollListener();
             this.onScrollListener = onScrollListener;
             recyclerView.addOnScrollListener(this.onScrollListener);
         }
 
-        private void clearOnScrollListener() {
-            if (this.onScrollListener != null) {
-                recyclerView.removeOnScrollListener(this.onScrollListener);
+        public final void clearOnScrollListener() {
+            if (onScrollListener != null) {
+                recyclerView.removeOnScrollListener(onScrollListener);
+                onScrollListener = null;
             }
         }
 
+        public final void reset() {
+            clearHeaderDecoration();
+            clearOnScrollListener();
+        }
 
+        public boolean onInterceptTouchEvent(MotionEvent ev) {
+            return recyclerView.onInterceptTouchEvent(ev);
+        }
+
+        public boolean onTouchEvent(MotionEvent ev) {
+            return recyclerView.onTouchEvent(ev);
+        }
     }
 
     private static class LayoutManagerDelegate {
@@ -279,6 +358,17 @@ public class RecyclerViewHeader2 extends RelativeLayout {
                 return linear.getReverseLayout();
             } else if (grid != null) {
                 return grid.getReverseLayout();
+//            } else if (staggeredGrid != null) {
+//                return ; //TODO: 05.04.2016 implement staggered
+            }
+            return false; //shouldn't get here
+        }
+
+        public final boolean isVertical() {
+            if (linear != null) {
+                return linear.getOrientation() == LinearLayoutManager.VERTICAL;
+            } else if (grid != null) {
+                return grid.getOrientation() == LinearLayoutManager.VERTICAL;
 //            } else if (staggeredGrid != null) {
 //                return ; //TODO: 05.04.2016 implement staggered
             }

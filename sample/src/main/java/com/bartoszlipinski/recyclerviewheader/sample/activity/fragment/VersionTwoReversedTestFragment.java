@@ -35,7 +35,7 @@ public class VersionTwoReversedTestFragment extends Fragment {
 
     private void setupViews(View view) {
         recycler = (RecyclerView) view.findViewById(R.id.recycler);
-        recycler.setLayoutManager(new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, true));
+        recycler.setLayoutManager(new LinearLayoutManager(getActivity(), LinearLayoutManager.HORIZONTAL, true));
         recycler.setAdapter(new ColorItemsAdapter(getActivity(), 110));
 
         recyclerHeader = (RecyclerViewHeader2) view.findViewById(R.id.header);

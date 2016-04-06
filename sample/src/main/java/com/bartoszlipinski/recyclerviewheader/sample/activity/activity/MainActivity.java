@@ -24,7 +24,6 @@ import android.support.v4.app.FragmentStatePagerAdapter;
 import android.support.v4.view.ViewPager;
 
 import com.bartoszlipinski.recyclerviewheader.sample.R;
-import com.bartoszlipinski.recyclerviewheader.sample.activity.fragment.RegularApproachReversedGridFragment;
 import com.bartoszlipinski.recyclerviewheader.sample.activity.fragment.VersionTwoReversedTestFragment;
 import com.bartoszlipinski.recyclerviewheader.sample.activity.fragment.VersionTwoTestFragment;
 
@@ -33,7 +32,7 @@ import com.bartoszlipinski.recyclerviewheader.sample.activity.fragment.VersionTw
  * 01.02.15
  */
 public class MainActivity extends FragmentActivity {
-    public static final int FRAGMENT_COUNT = 2;
+    public static final int FRAGMENT_COUNT = 4;
     private ViewPager mViewPager;
 
     @Override
@@ -69,7 +68,7 @@ public class MainActivity extends FragmentActivity {
 //                case 3:
 //                    return RegularApproachStaggeredGridFragment.newInstance();
                 default:
-                    return RegularApproachReversedGridFragment.newInstance();
+                    return VersionTwoTestFragment.newInstance();
             }
         }
 

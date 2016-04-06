@@ -20,7 +20,7 @@
         android:layout_height="@dimen/header_height"
         android:layout_margin="@dimen/recycler_divider_width"
         android:alpha="0.8"
-        android:layout_gravity="center_horizontal|bottom"
+        android:layout_gravity="center_vertical|right"
         android:background="@android:color/holo_blue_light">
 
         <Button
