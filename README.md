@@ -33,8 +33,8 @@ I was finding multiple aspects of the approach it presents, to be problematic fo
 
 I decided to finish the second version as a token of gratitude, for all your support. Thank you!
 
-**Nonetheless, as of today (06/04/2016) I'm beginning the process of retiring of the `RecyclerViewHeader` library.
-Version `2.0.0` will be the last **major** release. The only new development will contain fixes for critical bugs (with the exception of re-enabling `StaggeredGridLayoutManager` support).**
+Nonetheless, **as of today (06/04/2016) I'm beginning the process of retiring of the `RecyclerViewHeader` library.**
+Version `2.0.0` will be the last *major* release. The only new development will contain fixes for critical bugs (with the exception of re-enabling `StaggeredGridLayoutManager` support).
 
 Usage
 =====
