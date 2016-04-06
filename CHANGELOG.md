@@ -1,3 +1,18 @@
+Version 2.0.0 *(2016-04-06)*
+----------------------------
+RecyclerViewHeader 2 is a major release that focuses on fixing all of the previously reported issues.
+
+ * Attaching `RecyclerViewHeader` simplified. There's only one approach left (previously named `Header-already-aligned approach`).
+ * New: Horizontal `RecyclerViews` support added
+ * Fix: Header in wrong position after reusing fragment with `RecyclerView`
+ * Fix: Removing an item misplacing header.
+ 
+`StaggeredGridLayoutManager` support has been temporarily disabled. This is planned to be re-enabled in a future release. 
+ 
+*Important*:
+ 1. `RecyclerViewHeader` 2 uses a different package (`com.bartoszlipinski.recyclerviewheader2`)
+ 2. Maven `group` and `artifact` has been changed.
+
 Version 1.2.1 *(2016-02-04)*
 ----------------------------
 
