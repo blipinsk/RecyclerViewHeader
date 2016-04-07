@@ -1,4 +1,4 @@
-/**
+/*
  * Copyright 2015 Bartosz Lipinski
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -13,8 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
-package com.bartoszlipinski.recyclerviewheader.sample.activity.fragment;
+package com.bartoszlipinski.recyclerviewheader2.sample.fragment;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -24,39 +23,39 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.bartoszlipinski.recyclerviewheader.RecyclerViewHeader;
-import com.bartoszlipinski.recyclerviewheader.sample.R;
-import com.bartoszlipinski.recyclerviewheader.sample.activity.adapter.ColorItemsAdapter;
+import com.bartoszlipinski.recyclerviewheader2.RecyclerViewHeader;
+import com.bartoszlipinski.recyclerviewheader2.sample.R;
+import com.bartoszlipinski.recyclerviewheader2.sample.adapter.ColorItemsAdapter;
 
 /**
  * Created by Bartosz Lipinski
  * 01.04.15
  */
-public class RegularApproachGridFragment extends Fragment {
+public class SampleGridFragment extends Fragment {
 
-    private RecyclerViewHeader mRecyclerHeader;
-    private RecyclerView mRecycler;
+    private RecyclerViewHeader recyclerHeader;
+    private RecyclerView recycler;
 
-    public static RegularApproachGridFragment newInstance() {
-        RegularApproachGridFragment fragment = new RegularApproachGridFragment();
+    public static SampleGridFragment newInstance() {
+        SampleGridFragment fragment = new SampleGridFragment();
         return fragment;
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_regular_approach, container, false);
+        View view = inflater.inflate(R.layout.fragment_sample, container, false);
         setupViews(view);
         return view;
     }
 
     private void setupViews(View view) {
-        mRecycler = (RecyclerView) view.findViewById(R.id.recycler);
+        recycler = (RecyclerView) view.findViewById(R.id.recycler);
         GridLayoutManager layoutManager = new GridLayoutManager(getActivity(), 3);
-        mRecycler.setLayoutManager(layoutManager);
-        mRecycler.setAdapter(new ColorItemsAdapter(getActivity(), 21));
+        recycler.setLayoutManager(layoutManager);
+        recycler.setAdapter(new ColorItemsAdapter(getActivity(), 21));
 
-        mRecyclerHeader = RecyclerViewHeader.fromXml(getActivity(), R.layout.layout_header);
-        mRecyclerHeader.attachTo(mRecycler);
+        recyclerHeader = (RecyclerViewHeader) view.findViewById(R.id.header);
+        recyclerHeader.attachTo(recycler);
     }
 
 }

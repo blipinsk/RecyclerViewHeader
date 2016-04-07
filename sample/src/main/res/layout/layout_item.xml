@@ -3,7 +3,7 @@
     android:id="@+id/layout"
     android:orientation="vertical"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
+    android:layout_height="wrap_content"
     android:layout_margin="@dimen/recycler_divider_width"
     android:background="@drawable/round_background_green">
 
