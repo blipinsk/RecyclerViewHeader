@@ -4,4 +4,5 @@
     <dimen name="background_radius">4dp</dimen>
     <dimen name="recycler_divider_width">1dp</dimen>
     <dimen name="header_height">200dp</dimen>
+    <dimen name="header_height_huge">1500dp</dimen>
 </resources>

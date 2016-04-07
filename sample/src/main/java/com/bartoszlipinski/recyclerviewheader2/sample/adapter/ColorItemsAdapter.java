@@ -1,4 +1,4 @@
-/**
+/*
  * Copyright 2015 Bartosz Lipinski
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -13,38 +13,35 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
-package com.bartoszlipinski.recyclerviewheader.sample.activity.adapter;
+package com.bartoszlipinski.recyclerviewheader2.sample.adapter;
 
 import android.content.Context;
 import android.graphics.Color;
 import android.graphics.drawable.GradientDrawable;
 import android.graphics.drawable.LayerDrawable;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.bartoszlipinski.recyclerviewheader.sample.R;
-import com.bartoszlipinski.recyclerviewheader.sample.activity.utilities.ValueInterpolator;
+import com.bartoszlipinski.recyclerviewheader2.sample.R;
+import com.bartoszlipinski.recyclerviewheader2.sample.utilities.ValueInterpolator;
 
-/**
- * Created by Bartosz Lipinski
- * 01.04.15
- */
 public class ColorItemsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
-    private int[] mColors;
+    private int[] colors;
+    private boolean test = false;
 
     public ColorItemsAdapter(Context context, int numberOfItems) {
-        mColors = new int[numberOfItems];
+        colors = new int[numberOfItems];
 
-        int startColor = context.getResources().getColor(R.color.wisteria);
+        int startColor = ContextCompat.getColor(context, R.color.wisteria);
         int startR = Color.red(startColor);
         int startG = Color.green(startColor);
         int startB = Color.blue(startColor);
 
-        int endColor = context.getResources().getColor(R.color.emerald);
+        int endColor = ContextCompat.getColor(context, R.color.emerald);
         int endR = Color.red(endColor);
         int endG = Color.green(endColor);
         int endB = Color.blue(endColor);
@@ -54,7 +51,7 @@ public class ColorItemsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
         ValueInterpolator interpolatorB = new ValueInterpolator(0, numberOfItems - 1, endB, startB);
 
         for (int i = 0; i < numberOfItems; ++i) {
-            mColors[i] = Color.argb(255, (int) interpolatorR.map(i), (int) interpolatorG.map(i), (int) interpolatorB.map(i));
+            colors[i] = Color.argb(255, (int) interpolatorR.map(i), (int) interpolatorG.map(i), (int) interpolatorB.map(i));
         }
     }
 
@@ -68,22 +65,22 @@ public class ColorItemsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
     public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
         SampleViewHolder viewHolder = (SampleViewHolder) holder;
 
-        LayerDrawable bgDrawable = (LayerDrawable) viewHolder.mMainLayout.getBackground();
+        LayerDrawable bgDrawable = (LayerDrawable) viewHolder.mainLayout.getBackground();
         GradientDrawable shape = (GradientDrawable) bgDrawable.findDrawableByLayerId(R.id.background_shape);
-        shape.setColor(mColors[position]);
+        shape.setColor(colors[position]);
     }
 
     @Override
     public int getItemCount() {
-        return mColors.length;
+        return colors.length - (test ? 1 : 0);
     }
 
     public static class SampleViewHolder extends RecyclerView.ViewHolder {
-        public View mMainLayout;
+        public View mainLayout;
 
         public SampleViewHolder(View view) {
             super(view);
-            mMainLayout = view.findViewById(R.id.layout);
+            mainLayout = view.findViewById(R.id.layout);
         }
     }
 }
