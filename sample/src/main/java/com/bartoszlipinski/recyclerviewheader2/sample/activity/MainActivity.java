@@ -25,7 +25,6 @@ import android.support.v4.view.ViewPager;
 import com.bartoszlipinski.recyclerviewheader2.sample.R;
 import com.bartoszlipinski.recyclerviewheader2.sample.fragment.SampleGridFragment;
 import com.bartoszlipinski.recyclerviewheader2.sample.fragment.SampleListFragment;
-import com.bartoszlipinski.recyclerviewheader2.sample.fragment.SampleListHugeHeaderFragment;
 import com.bartoszlipinski.recyclerviewheader2.sample.fragment.SampleListReversedFragment;
 
 /**
@@ -33,7 +32,7 @@ import com.bartoszlipinski.recyclerviewheader2.sample.fragment.SampleListReverse
  * 01.02.15
  */
 public class MainActivity extends FragmentActivity {
-    public static final int FRAGMENT_COUNT = 4;
+    public static final int FRAGMENT_COUNT = 3;
     private ViewPager viewPager;
 
     @Override
@@ -64,7 +63,7 @@ public class MainActivity extends FragmentActivity {
                 case 2:
                     return SampleListReversedFragment.newInstance();
                 default:
-                    return SampleListHugeHeaderFragment.newInstance();
+                    return SampleListFragment.newInstance();
             }
         }
 
