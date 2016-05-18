@@ -160,7 +160,7 @@ public class RecyclerViewHeader extends RelativeLayout {
     @CallSuper
     public boolean onInterceptTouchEvent(MotionEvent ev) {
         recyclerWantsTouch = isAttachedToRecycler && recyclerView.onInterceptTouchEvent(ev);
-        if (recyclerWantsTouch && ev.getAction() == MotionEvent.ACTION_DOWN) {
+        if (recyclerWantsTouch && ev.getAction() == MotionEvent.ACTION_MOVE) {
             downTranslation = calculateTranslation();
         }
         return recyclerWantsTouch || super.onInterceptTouchEvent(ev);
