@@ -22,6 +22,12 @@ You need to bare in mind that the library is created to be used with relatively 
 E.g. if your header uses a complex layout (with multiple scrolls and focusable elements) or a complicated `Touch` management system I advice you not to use `RecyclerViewHeader`, but a proper `RecyclerView` `Adapter` that incorporates inflating multiple types of views.
 There are other libraries on github (for example [HeaderRecyclerView by Karumi][1]) that might seem a bit more complicated to use, but are implementing mentioned approach and will fit your needs better.
 
+TLDR:
+
+  1. Simple header
+  2. Header smaller than screen height (for vertical `RecyclerView`) or width (for horizontal `RecyclerView`)
+  3. No complicated touch system (including vertical scrolling elements)
+  
 On version 2
 ------------
 I created this library back in the day when I thought `RecyclerView` was all new and difficult. Writing an adapter that could inflate multiple types of `Views` seemed like a difficult job to do.

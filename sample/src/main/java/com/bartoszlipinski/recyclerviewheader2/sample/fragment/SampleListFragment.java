@@ -51,7 +51,7 @@ public class SampleListFragment extends Fragment {
     private void setupViews(View view) {
         recycler = (RecyclerView) view.findViewById(R.id.recycler);
         recycler.setLayoutManager(new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false));
-        recycler.setAdapter(new ColorItemsAdapter(getActivity(), 21));
+        recycler.setAdapter(new ColorItemsAdapter(getActivity(), 12));
 
         recyclerHeader = (RecyclerViewHeader) view.findViewById(R.id.header);
         recyclerHeader.attachTo(recycler);

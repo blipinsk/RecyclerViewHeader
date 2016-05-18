@@ -108,7 +108,7 @@ public class RecyclerViewHeader extends RelativeLayout {
     }
 
     private void onScrollChanged() {
-        hidden = !layoutManager.isFirstRowVisible();
+        hidden = recyclerView.hasItems() && !layoutManager.isFirstRowVisible();
         RecyclerViewHeader.super.setVisibility(hidden ? INVISIBLE : intendedVisibility);
         if (!hidden) {
             final int translation = calculateTranslation();
@@ -268,6 +268,10 @@ public class RecyclerViewHeader extends RelativeLayout {
             return isVertical ?
                     recyclerView.computeVerticalScrollRange() - recyclerView.getHeight() :
                     recyclerView.computeHorizontalScrollRange() - recyclerView.getWidth();
+        }
+
+        public final boolean hasItems() {
+            return recyclerView.getAdapter() != null && recyclerView.getAdapter().getItemCount() != 0;
         }
 
         public final void setHeaderDecoration(HeaderItemDecoration decoration) {
