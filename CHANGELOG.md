@@ -1,3 +1,10 @@
+Version 2.0.1 *(2016-05-18)*
+----------------------------
+
+ * Fix: Scroll jump bug
+ * Fix: Header not displaying if there are no items in the adapter
+ * Headers exceeding `RecyclerView's` height (for vertical) or width (for horizontal) are no longer supported (you cannot scroll them if there's no items in the adapter)
+
 Version 2.0.0 *(2016-04-06)*
 ----------------------------
 RecyclerViewHeader 2 is a major release that focuses on fixing all of the previously reported issues.
