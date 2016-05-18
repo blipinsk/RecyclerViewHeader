@@ -99,7 +99,7 @@ You can grab the library via Maven Central. Just add a proper dependency inside 
 
 ```xml
 dependencies {
-    compile 'com.bartoszlipinski:recyclerviewheader2:2.0.0'
+    compile 'com.bartoszlipinski:recyclerviewheader2:2.0.1'
 }
 ```
 
