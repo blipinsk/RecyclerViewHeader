@@ -321,7 +321,7 @@ public class RecyclerViewHeader extends RelativeLayout {
         }
 
 	  	public final void setOnLayoutChangeListener(RecyclerView.OnLayoutChangeListener onLayoutChangeListener){
-			clearHeaderDecoration();
+            clearOnLayoutChangeListener();
 			this.onLayoutChangeListener = onLayoutChangeListener;
 			recyclerView.addOnLayoutChangeListener(this.onLayoutChangeListener);
 	  	}
