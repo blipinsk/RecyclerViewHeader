@@ -26,7 +26,7 @@ TLDR:
 
   1. Simple header
   2. Header smaller than screen height (for vertical `RecyclerView`) or width (for horizontal `RecyclerView`)
-  3. No complicated touch system (including vertical scrolling elements)
+  3. No complicated touch system (including scrollable elements)
   
 On version 2
 ------------
