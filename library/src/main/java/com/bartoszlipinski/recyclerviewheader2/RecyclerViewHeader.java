@@ -92,6 +92,12 @@ public class RecyclerViewHeader extends RelativeLayout {
                 });
             }
         });
+      recyclerView.setOnLayoutChangeListener(new OnLayoutChangeListener() {
+        @Override
+        public void onLayoutChange(View v, int left, int top, int right, int bottom, int oldLeft, int oldTop, int oldRight, int oldBottom) {
+          onScrollChanged();
+        }
+      });
     }
 
     /**
@@ -232,6 +238,7 @@ public class RecyclerViewHeader extends RelativeLayout {
         private HeaderItemDecoration decoration;
         private RecyclerView.OnScrollListener onScrollListener;
         private RecyclerView.OnChildAttachStateChangeListener onChildAttachListener;
+	  	private RecyclerView.OnLayoutChangeListener onLayoutChangeListener;
 
         private RecyclerViewDelegate(final @NonNull RecyclerView recyclerView) {
             this.recyclerView = recyclerView;
@@ -313,10 +320,24 @@ public class RecyclerViewHeader extends RelativeLayout {
             }
         }
 
+	  	public final void setOnLayoutChangeListener(RecyclerView.OnLayoutChangeListener onLayoutChangeListener){
+			clearHeaderDecoration();
+			this.onLayoutChangeListener = onLayoutChangeListener;
+			recyclerView.addOnLayoutChangeListener(this.onLayoutChangeListener);
+	  	}
+
+	  	public final void clearOnLayoutChangeListener(){
+			if(onLayoutChangeListener != null){
+		  		recyclerView.removeOnLayoutChangeListener(onLayoutChangeListener);
+		  	onLayoutChangeListener = null;
+			}
+	  	}
+
         public final void reset() {
             clearHeaderDecoration();
             clearOnScrollListener();
             clearOnChildAttachListener();
+		  	clearOnLayoutChangeListener();
         }
 
         public boolean onInterceptTouchEvent(MotionEvent ev) {
